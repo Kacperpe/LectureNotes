@@ -137,37 +137,17 @@
       white-space: nowrap;
     }
 
-    .top-panel {
-      margin-top: 18px;
-      padding: 12px 14px;
+    .hero-top {
+      padding-top: 22px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       flex-wrap: wrap;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--surface-strong);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 20px var(--shadow);
-    }
-
-    .top-panel-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .top-panel-nav {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
     }
 
     .hero {
-      padding: 28px 0 42px;
+      padding: 34px 0 42px;
       display: grid;
       gap: 26px;
       grid-template-columns: 1.12fr 0.88fr;
@@ -422,21 +402,8 @@
         width: 44px;
       }
 
-      .top-panel {
+      .hero-top {
         align-items: stretch;
-      }
-
-      .top-panel-group {
-        width: 100%;
-      }
-
-      .top-panel-nav {
-        width: 100%;
-      }
-
-      .top-panel-nav .nav-btn,
-      .top-panel-group .theme-icon-btn {
-        width: auto;
       }
 
       .metric-grid,
@@ -458,17 +425,12 @@
 </head>
 <body>
   <main class="container">
-    <div class="top-panel">
+    <div class="hero-top">
       <div class="brand">
         <span class="brand-dot" aria-hidden="true"></span>
         <span>LectureNotes AI</span>
       </div>
-      <div class="top-panel-group">
-        <nav class="top-panel-nav" aria-label="Nawigacja strony">
-          <a class="nav-btn" href="#jak-dziala">Jak to działa</a>
-          <a class="nav-btn" href="#demo">Demo</a>
-          <a class="nav-btn" href="./studio.html">Studio</a>
-        </nav>
+      <div class="hero-actions">
         <button id="theme-toggle" class="nav-btn theme-icon-btn" type="button" aria-pressed="false" aria-label="Przełącz motyw">
           <svg class="theme-toggle-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"></circle>
@@ -479,6 +441,7 @@
           </svg>
           <span class="sr-only">Przełącz motyw</span>
         </button>
+        <a class="nav-btn" href="#demo">Przejdź do demo</a>
       </div>
     </div>
 
