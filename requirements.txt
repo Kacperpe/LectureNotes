@@ -1,0 +1,11 @@
+# FastAPI server dependencies
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Original bot dependencies
+requests
+gdown
+openai-whisper
+torch
+ffmpeg-python

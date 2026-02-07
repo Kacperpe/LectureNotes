@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoiceNote AI — Deep Focus</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Drobna poświata i szumy tła dla trybu “Deep Focus” */
+    .glow-green { box-shadow: 0 0 25px rgba(16, 185, 129, 0.35); }
+    .glow-blue  { box-shadow: 0 0 25px rgba(59, 130, 246, 0.25); }
+    .grain {
+      position: fixed; inset: 0; pointer-events: none; opacity: 0.05; mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 40 40'%3E%3Cg fill='%23fff' fill-opacity='0.35'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3Ccircle cx='13' cy='9' r='1'/%3E%3Ccircle cx='25' cy='5' r='1'/%3E%3Ccircle cx='37' cy='13' r='1'/%3E%3Ccircle cx='9' cy='25' r='1'/%3E%3Ccircle cx='21' cy='21' r='1'/%3E%3Ccircle cx='33' cy='29' r='1'/%3E%3C/g%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-900 text-slate-100 antialiased">
+  <div class="grain"></div>
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-72 bg-slate-800/80 backdrop-blur border-r border-slate-700 px-6 py-6 flex flex-col gap-6">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-500 glow-green"></div>
+        <div>
+          <p class="text-sm uppercase tracking-[0.18em] text-emerald-300">VoiceNote AI</p>
+          <p class="text-lg font-semibold text-slate-50">Deep Focus</p>
+        </div>
+      </div>
+      <nav class="space-y-2 text-sm">
+        <button class="w-full flex items-center gap-3 px-3 py-2 rounded-lg bg-emerald-500/10 text-emerald-200 border border-emerald-500/40 hover:bg-emerald-500/20 focus:outline-none focus:ring-2 focus:ring-emerald-400/60">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 glow-green"></span>
+          Nowa sesja
+        </button>
+        <a class="block px-3 py-2 rounded-lg hover:bg-slate-700/60 text-slate-200" href="#">Biblioteka</a>
+        <a class="block px-3 py-2 rounded-lg hover:bg-slate-700/60 text-slate-200" href="#">Szablony</a>
+        <a class="block px-3 py-2 rounded-lg hover:bg-slate-700/60 text-slate-200" href="#">Ustawienia</a>
+      </nav>
+      <div class="mt-auto space-y-3 text-sm text-slate-300">
+        <p class="font-semibold text-slate-100">Szybkie akcje</p>
+        <div class="space-y-2">
+          <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-slate-700/80 border border-slate-600 hover:border-emerald-500/60 hover:bg-slate-700 glow-blue">
+            Importuj plik
+            <span class="text-xs text-emerald-300">MP3 / MP4</span>
+          </button>
+          <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-slate-700/60 hover:bg-slate-700">
+            Połącz z chmurą
+            <span class="text-xs text-blue-300">Drive</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-8 space-y-6 relative">
+      <div class="flex flex-col lg:flex-row lg:items-center gap-4 justify-between">
+        <div>
+          <h1 class="text-2xl font-semibold text-slate-50">Studio nagrań</h1>
+          <p class="text-slate-400 text-sm">Transkrybuj, podsumuj i oznacz najważniejsze fragmenty.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <label class="flex items-center gap-3 px-4 py-2 rounded-lg bg-slate-800/80 border border-slate-700 cursor-pointer hover:border-emerald-500/50">
+            <input type="file" class="sr-only" aria-label="Wybierz plik do transkrypcji">
+            <span class="text-sm text-slate-200">Wgraj plik</span>
+            <span class="text-xs text-emerald-300">MP3 / MP4 / WAV</span>
+          </label>
+          <button class="px-4 py-2 rounded-lg bg-emerald-500 text-slate-900 font-semibold hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300 glow-green">
+            Eksportuj notatki
+          </button>
+        </div>
+      </div>
+
+      <div class="grid xl:grid-cols-[320px,1fr] gap-6 items-start">
+        <!-- Lista nagrań -->
+        <section class="bg-slate-800/70 border border-slate-700 rounded-2xl p-5 shadow-lg shadow-slate-900/60">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <p class="text-sm text-slate-400">Biblioteka</p>
+              <p class="text-lg font-semibold text-slate-100">Ostatnie nagrania</p>
+            </div>
+            <button class="text-xs px-3 py-1 rounded-full bg-slate-700 text-slate-200 border border-slate-600">Filtr</button>
+          </div>
+          <div class="space-y-3">
+            <article class="p-3 rounded-xl bg-slate-700/60 border border-slate-600 hover:border-emerald-500/50 hover:bg-slate-700/80 transition">
+              <div class="flex items-center justify-between">
+                <p class="font-semibold text-slate-50">Spotkanie produktowe</p>
+                <span class="text-xs text-emerald-300">12:32</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">Auto-sumaryzacja · PL</p>
+            </article>
+            <article class="p-3 rounded-xl bg-slate-800 border border-slate-700 hover:border-blue-500/50 hover:bg-slate-800/80">
+              <div class="flex items-center justify-between">
+                <p class="font-semibold text-slate-50">Notatki badawcze</p>
+                <span class="text-xs text-blue-300">08:14</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">Ręczna redakcja · EN</p>
+            </article>
+            <article class="p-3 rounded-xl bg-slate-800 border border-slate-700 hover:border-emerald-500/50 hover:bg-slate-800/80">
+              <div class="flex items-center justify-between">
+                <p class="font-semibold text-slate-50">Wywiad użytkownika</p>
+                <span class="text-xs text-emerald-300">27:03</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">Tagi: onboarding, friction</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Player + tekst -->
+        <section class="space-y-4">
+          <div class="bg-slate-800/70 border border-slate-700 rounded-2xl p-5 shadow-xl shadow-slate-900/70">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <p class="text-sm text-slate-400">Aktywna sesja</p>
+                <p class="text-lg font-semibold text-slate-100">VoiceNote • Night Shift</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-emerald-300">PL</span>
+                <span class="w-1 h-1 rounded-full bg-slate-500"></span>
+                <span class="text-xs text-slate-400">Auto-stop: 30m</span>
+              </div>
+            </div>
+
+            <!-- Player controls -->
+            <div class="mt-4 flex flex-wrap gap-3 items-center">
+              <button class="h-14 px-6 rounded-full bg-emerald-500 text-slate-900 font-semibold text-sm hover:bg-emerald-400 focus:ring-2 focus:ring-emerald-300 glow-green">
+                ● Nagraj
+              </button>
+              <button class="h-14 w-14 rounded-full bg-slate-700 border border-slate-600 text-lg hover:border-emerald-500/60">▶</button>
+              <button class="h-14 w-14 rounded-full bg-slate-700 border border-slate-600 text-lg hover:border-blue-500/60">⏸</button>
+              <div class="flex-1 min-w-[200px]">
+                <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+                  <div class="h-full w-1/2 bg-gradient-to-r from-emerald-500 to-blue-500"></div>
+                </div>
+                <div class="flex justify-between text-xs text-slate-400 mt-1">
+                  <span>00:12</span><span>12:32</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-slate-300">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Live Transcribe
+              </div>
+            </div>
+
+            <!-- Waveform mock -->
+            <div class="mt-5 p-4 bg-slate-900/60 rounded-xl border border-slate-700">
+              <svg viewBox="0 0 600 120" class="w-full h-24">
+                <defs>
+                  <linearGradient id="wave" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#10B981"/>
+                    <stop offset="100%" stop-color="#3B82F6"/>
+                  </linearGradient>
+                </defs>
+                <polyline fill="none" stroke="url(#wave)" stroke-width="3" points="
+                  0,60 20,40 40,80 60,30 80,90 100,45 120,70 140,35 160,75 180,30 200,85 220,40 240,90 260,45 280,70
+                  300,40 320,80 340,35 360,75 380,30 400,85 420,40 440,90 460,45 480,70 500,40 520,80 540,35 560,75 580,60"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="bg-slate-800/70 border border-slate-700 rounded-2xl p-4 shadow-lg shadow-slate-900/60">
+              <div class="flex items-center justify-between mb-2">
+                <p class="text-sm text-slate-400">Transkrypcja</p>
+                <span class="text-xs text-emerald-300 bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-500/30">Live</span>
+              </div>
+              <div class="text-sm leading-relaxed text-slate-100 space-y-2">
+                <p><span class="text-emerald-300">[00:12]</span> Hej, sprawdźmy plan wydania 1.4 — potrzebujemy dopiąć onboarding.</p>
+                <p><span class="text-emerald-300">[02:40]</span> Nagrania wideo będą eksportowane automatycznie do folderu „audio_do_przetworzenia”.</p>
+                <p><span class="text-emerald-300">[07:15]</span> Dodajmy podsumowanie AI i tagowanie słów kluczowych.</p>
+              </div>
+            </div>
+            <div class="bg-slate-800/70 border border-slate-700 rounded-2xl p-4 shadow-lg shadow-slate-900/60 space-y-3">
+              <div class="flex items-center justify-between">
+                <p class="text-sm text-slate-400">Podsumowanie AI</p>
+                <button class="text-xs px-3 py-1 rounded-full bg-slate-700 hover:bg-slate-600 border border-slate-600">Odśwież</button>
+              </div>
+              <p class="text-slate-100 text-sm">- Kluczowe punkty: onboarding, eksport automatyczny, tagowanie AI.</p>
+              <p class="text-slate-300 text-sm">- Action items: przygotuj checklistę wydania 1.4, potwierdź ścieżkę eksportu, zdefiniuj słowa kluczowe.</p>
+              <div class="flex gap-2 flex-wrap">
+                <span class="px-3 py-1 rounded-full text-xs bg-emerald-500/15 text-emerald-200 border border-emerald-500/30">onboarding</span>
+                <span class="px-3 py-1 rounded-full text-xs bg-blue-500/10 text-blue-200 border border-blue-500/30">eksport</span>
+                <span class="px-3 py-1 rounded-full text-xs bg-slate-700 text-slate-200 border border-slate-600">tagi AI</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

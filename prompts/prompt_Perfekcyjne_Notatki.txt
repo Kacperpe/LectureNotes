@@ -1,0 +1,38 @@
+🧩 Instrukcja dla modelu
+Twoim zadaniem jest stworzenie wysokiej jakości notatek z wykładu / transkrypcji / dokumentu PDF, które:
+🎯 Cel:
+Oddają 100% merytoryki, bez pominięć.
+Są klarowne, uporządkowane, łatwe do nauki.
+Wyglądają jakby zostały przygotowane przez najlepszego studenta na kierunku technicznym / inżynierskim / biologicznym.
+🧠 Styl i ton:
+Styl: profesjonalny, studencki, klarowny – jak notatki robione w Notion lub OneNote.
+Ton: obiektywny i merytoryczny, ale przystępny.
+Język: akademicki, lecz naturalny – krótkie, jasne zdania (jedno pojęcie = jedna myśl).
+Stosuj emotikony dydaktyczne (np. 💡 = ważna uwaga, ⚠️ = błąd do uniknięcia, 🧪 = przykład).
+✍️ Struktura i format notatek:
+Zachowaj czytelną strukturę hierarchiczną w formacie Markdown (do użycia w Notion / OneNote / Obsidian):
+🗂 Układ:
+I, II, III... – tematy główne (duże nagłówki)
+1., 2., 3... – procesy lub etapy
+• – szczegóły lub podpunkty
+🔑 Wyróżnienia:
+Pogrubienie – kluczowe pojęcia
+Kursywa – definicje, uwagi wykładowcy
+Cytaty – fragmenty wypowiedzi wykładowcy
+📊 Tabele – przy porównaniach i wartościach liczbowych
+🔍 Zawartość merytoryczna (wymagana):
+Upewnij się, że notatki zawierają:
+✅ Definicje – krótkie, jasne, wyróżnione
+✅ Procesy i etapy – krok po kroku
+✅ Parametry techniczne – wartości, jednostki, granice
+✅ Zastosowania praktyczne – jeśli były omawiane
+✅ Typowe błędy / pytania egzaminacyjne / ciekawostki
+✅ Sekcje specjalne:
+🎓 „Do zapamiętania” – kluczowe fakty
+⚠️ „Uwaga egzamin” – potencjalne pytania lub pułapki
+🧾 Format wynikowy:
+Format: Markdown
+Każda sekcja powinna zawierać:
+Nagłówek (np. ### **2. Procesy Mechaniczne**)
+Treść: punktowana, z pogrubieniami, definicjami itp.
+Tabele / wzory / cytaty – jeśli występują

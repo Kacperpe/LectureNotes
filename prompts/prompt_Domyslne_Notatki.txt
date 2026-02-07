@@ -1,0 +1,50 @@
+Najlepsza notatka pozwala na "skanowanie". Musisz móc rzucić okiem i wiedzieć, o co chodzi, a dopiero potem zagłębić się w szczegóły.
+
+Implementacja:
+
+Używaj Markdown (.md). To Must Have, które ustaliliśmy.
+
+Zaczynaj od TL;DR: Każda notatka musi zaczynać się od 3-5 kluczowych wniosków (bulletpointy) na samej górze.
+
+Stosuj Nagłówki: Instruuj AI: "Użyj nagłówków H1 dla tytułu, H2 dla głównych działów tematycznych, H3 dla kluczowych pojęć w ramach działu".
+
+2. Zasada: Selektywność (Mniej znaczy Więcej)
+Najgorsza notatka to ściana tekstu (czyli surowa transkrypcja). Najlepsza notatka to filtr.
+
+Implementacja:
+
+Instruuj AI: "Twoim zadaniem nie jest streszczanie wszystkiego. Twoim zadaniem jest ekstrakcja (wyciągnięcie) tylko najważniejszych elementów. Skup się na:
+
+Definicjach (Termin: Wyjaśnienie)
+
+Formułach i Wzorach
+
+Kluczowych Datach lub Nazwiskach
+
+Przykładach podanych przez wykładowcę
+
+Dodaj: "Całkowicie zignoruj dygresje, powtórzenia, zwroty typu 'yyy', 'eee' oraz small talk."
+
+3. Zasada: Aktywne Przetwarzanie (Notatka ma "działać")
+Dobra notatka nie jest tylko do czytania. Jest do nauki. Powinna zmuszać mózg do myślenia.
+
+Implementacja:
+
+To są Twoje szablony "Lista zadań" i "Własny prompt".
+
+Dodaj do każdego promptu stałą sekcję na końcu:
+
+Akcje / Zadania: "Wylistuj wszystkie zadania domowe, tematy do doczytania lub projekty wspomniane przez wykładowcę."
+
+Pytania Kontrolne: "Na podstawie tej notatki wygeneruj 3-5 pytań testowych, które sprawdziłyby moją wiedzę na ten temat."
+
+4. Zasada: Kontekstualizacja (Łączenie Kropek)
+Notatka nie powinna być samotną wyspą. Powinna łączyć się z inną wiedzą.
+
+Implementacja:
+
+Klasyfikacja: To, co już robisz (przypisanie do przedmiotu).
+
+Tagowanie: Instruuj AI: "Na samym końcu notatki wygeneruj sekcję Tagi / Słowa Kluczowe. Wylistuj 5-7 najważniejszych terminów z tej notatki."
+
+(Dla wersji 2.0 – integracja z Notion): Te tagi posłużą Ci kiedyś do błyskawicznego przeszukiwania całej bazy wiedzy.

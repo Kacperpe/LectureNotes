@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoiceNote AI — Prototyp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            deep: {
+              bg: "#0F172A",
+              surface: "#1E293B",
+              text: "#F1F5F9",
+              muted: "#94A3B8",
+              accent: "#10B981",
+            },
+            swiss: {
+              bg: "#f9fafb",
+              surface: "#ffffff",
+              text: "#111827",
+              muted: "#6b7280",
+              accent: "#2563eb",
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const API_BASE = window.API_BASE || "http://localhost:8000";
+
+    const recordings = [
+      { title: "Spotkanie produktowe", duration: "12:32", status: "Synced" },
+      { title: "Notatki badawcze", duration: "08:14", status: "Processing" },
+      { title: "Wywiad użytkownika", duration: "27:03", status: "Synced" },
+    ];
+
+    const themes = {
+      deep: {
+        name: "Deep Focus",
+        bg: "bg-[var(--bg)]",
+        surface: "bg-[var(--surface)]",
+        text: "text-[var(--text)]",
+        muted: "text-[var(--muted)]",
+        accent: "text-[var(--accent)]",
+      },
+      swiss: {
+        name: "Swiss Minimalist",
+        bg: "bg-[var(--bg)]",
+        surface: "bg-[var(--surface)]",
+        text: "text-[var(--text)]",
+        muted: "text-[var(--muted)]",
+        accent: "text-[var(--accent)]",
+      },
+    };
+
+    const wavePlaceholder = (
+      <svg viewBox="0 0 600 120" className="w-full h-20">
+        <defs>
+          <linearGradient id="wave" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#10B981" />
+            <stop offset="100%" stopColor="#3B82F6" />
+          </linearGradient>
+        </defs>
+        <polyline
+          fill="none"
+          stroke="url(#wave)"
+          strokeWidth="3"
+          points="
+            0,60 20,40 40,80 60,30 80,90 100,45 120,70 140,35 160,75 180,30 200,85 220,40 240,90 260,45 280,70
+            300,40 320,80 340,35 360,75 380,30 400,85 420,40 440,90 460,45 480,70 500,40 520,80 540,35 560,75 580,60"
+        />
+      </svg>
+    );
+
+    function Layout() {
+      const [theme, setTheme] = React.useState("deep");
+      const [status, setStatus] = React.useState("Synced");
+      const [noteText, setNoteText] = React.useState("Transkrypcja pojawi się tutaj...");
+      const [driveLink, setDriveLink] = React.useState("");
+      const [actionMessage, setActionMessage] = React.useState("");
+      const [loading, setLoading] = React.useState(false);
+
+      React.useEffect(() => {
+        const isDeep = theme === "deep";
+        document.documentElement.style.setProperty("--bg", isDeep ? "#0F172A" : "#f9fafb");
+        document.documentElement.style.setProperty("--surface", isDeep ? "#1E293B" : "#ffffff");
+        document.documentElement.style.setProperty("--text", isDeep ? "#F1F5F9" : "#111827");
+        document.documentElement.style.setProperty("--muted", isDeep ? "#94A3B8" : "#6b7280");
+        document.documentElement.style.setProperty("--accent", isDeep ? "#10B981" : "#2563eb");
+      }, [theme]);
+
+      async function callBackend(endpoint, payload, successLabel) {
+        setLoading(true);
+        setActionMessage("Łączenie z serwerem...");
+        try {
+          const resp = await fetch(`${API_BASE}${endpoint}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (!resp.ok) throw new Error(data.error || "Nieznany błąd");
+          setActionMessage(successLabel || "Gotowe.");
+          return data;
+        } catch (err) {
+          setActionMessage(`Błąd: ${err.message}`);
+          return null;
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      async function handleImport() {
+        if (!driveLink.trim()) {
+          setActionMessage("Wklej link z Google Drive.");
+          return;
+        }
+        const data = await callBackend("/api/import-drive", { drive_url: driveLink }, "Zaimportowano. Czekaj na transkrypcję...");
+        if (data?.transcription) {
+          setNoteText(data.transcription);
+          setStatus("Processing");
+        }
+      }
+
+      async function handleExport() {
+        const data = await callBackend("/api/export-notion", { transcription: noteText, summary: "Autopodsumowanie (stub)" }, "Wysłano do Notion.");
+        if (data) setStatus("Synced");
+      }
+
+      return (
+        <div className={`min-h-screen ${themes[theme].bg} ${themes[theme].text} transition-colors`}>
+          <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="flex w-full max-w-7xl min-h-[80vh] overflow-hidden rounded-3xl border border-slate-700/60 shadow-2xl">
+            {/* Sidebar */}
+            <aside className={`w-72 border-r border-slate-700/60 p-6 flex flex-col gap-6`} style={{background:"var(--surface)"}}>
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-500 shadow-lg shadow-emerald-500/40" />
+                <div>
+                  <p className="text-sm uppercase tracking-[0.18em]" style={{color:"var(--muted)"}}>VoiceNote AI</p>
+                  <p className="text-lg font-semibold" style={{color:"var(--text)"}}>{themes[theme].name}</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {recordings.map((rec, i) => (
+                  <div key={i} className="p-3 rounded-xl border border-slate-700/40 bg-slate-800/30 hover:border-emerald-500/60">
+                    <div className="flex items-center justify-between">
+                      <p className="font-semibold" style={{color:"var(--text)"}}>{rec.title}</p>
+                      <span className="text-xs" style={{color:"var(--accent)"}}>{rec.duration}</span>
+                    </div>
+                    <p className="text-xs" style={{color:"var(--muted)"}}>{rec.status}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-auto space-y-3 text-sm">
+                <p className="font-semibold" style={{color:"var(--text)"}}>Tryb</p>
+                <div className="flex gap-2">
+                  <button onClick={() => setTheme("deep")} className={`px-3 py-2 rounded-lg border ${theme==="deep" ? "border-emerald-400 bg-emerald-500/20" : "border-slate-600"}`}>Deep Focus</button>
+                  <button onClick={() => setTheme("swiss")} className={`px-3 py-2 rounded-lg border ${theme==="swiss" ? "border-blue-400 bg-blue-500/10" : "border-slate-600"}`}>Swiss</button>
+                </div>
+              </div>
+            </aside>
+
+            {/* Main */}
+            <main className="flex-1 p-8 space-y-6 bg-slate-900/40">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl font-semibold">Studio nagrań</h1>
+                  <p className="text-sm" style={{color:"var(--muted)"}}>Transkrybuj, podsumuj, wyślij do Notion.</p>
+                </div>
+              <div className="flex gap-3 flex-wrap">
+                <button onClick={handleImport} className="px-4 py-2 rounded-lg border border-slate-600 bg-slate-800/50 hover:border-emerald-400 disabled:opacity-50" disabled={loading}>Importuj z GDrive</button>
+                <button onClick={handleExport} className="px-4 py-2 rounded-lg disabled:opacity-50" style={{background:"var(--accent)", color:"#0f172a"}} disabled={loading}>Eksportuj do Notion</button>
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-[1.1fr,0.9fr] gap-6 items-start">
+              <section className="p-6 rounded-2xl border border-slate-700/70 bg-slate-800/50 space-y-4 shadow-xl shadow-slate-900/50">
+                <div className="flex flex-wrap items-center gap-4 justify-between">
+                    <button className="h-16 px-8 rounded-full bg-emerald-500 text-slate-900 font-semibold text-lg shadow-lg shadow-emerald-500/40 animate-pulse">● Nagraj</button>
+                    <div className="flex gap-2">
+                      <button className="h-12 w-12 rounded-full border border-slate-700">▶</button>
+                      <button className="h-12 w-12 rounded-full border border-slate-700">⏸</button>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm" style={{color:"var(--muted)"}}>
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Live Transcribe
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-slate-700/70 bg-slate-900/60 p-4">
+                    {wavePlaceholder}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm" style={{color:"var(--muted)"}}>Link z Google Drive</label>
+                    <input
+                      type="url"
+                      value={driveLink}
+                      onChange={(e)=>setDriveLink(e.target.value)}
+                      placeholder="https://drive.google.com/..."
+                      className="w-full rounded-lg border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm focus:border-emerald-400 focus:outline-none"
+                      style={{color:"var(--text)"}}
+                    />
+                    <p className="text-xs" style={{color:"var(--muted)"}}>
+                      Wklej publiczny link (lub z odpowiednimi uprawnieniami) i kliknij „Importuj z GDrive”.
+                    </p>
+                  </div>
+                  <textarea
+                    value={noteText}
+                    onChange={(e)=>setNoteText(e.target.value)}
+                    className="w-full min-h-[220px] rounded-xl border border-slate-700 bg-slate-900/70 p-4 text-sm"
+                    style={{color:"var(--text)"}}
+                  />
+                </section>
+
+                <section className="p-6 rounded-2xl border border-slate-700/70 bg-slate-800/50 space-y-4 shadow-lg shadow-slate-900/50">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm" style={{color:"var(--muted)"}}>Status synchronizacji</p>
+                    <select
+                      value={status}
+                      onChange={(e)=>setStatus(e.target.value)}
+                      className="bg-slate-900/60 border border-slate-700 rounded-lg px-3 py-1 text-sm"
+                    >
+                      <option>Synced</option>
+                      <option>Processing</option>
+                      <option>Error</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`h-3 w-3 rounded-full ${status==="Synced" ? "bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.8)]" : status==="Processing" ? "bg-yellow-400 animate-pulse" : "bg-red-400 animate-pulse"}`} />
+                    <p className="text-sm">{status==="Synced" ? "Zsynchronizowano z Notion" : status==="Processing" ? "Przetwarzanie..." : "Błąd synchronizacji"}</p>
+                  </div>
+                  <div className="space-y-3 text-sm">
+                    <p className="font-semibold" style={{color:"var(--text)"}}>Podsumowanie AI</p>
+                    <ul className="list-disc list-inside space-y-1" style={{color:"var(--muted)"}}>
+                      <li>Kluczowe punkty: onboarding, eksport, tagowanie.</li>
+                      <li>Action items: checklist 1.4, ścieżka eksportu, słowa kluczowe.</li>
+                    </ul>
+                    {actionMessage && (
+                      <div className="text-xs rounded-lg border border-slate-700 bg-slate-900/60 px-3 py-2" style={{color:"var(--muted)"}}>
+                        {loading ? "⏳ " : ""}{actionMessage}
+                      </div>
+                    )}
+                  </div>
+                </section>
+              </div>
+            </main>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<Layout />);
+  </script>
+</body>
+</html>
