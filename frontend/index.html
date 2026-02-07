@@ -58,6 +58,7 @@
         radial-gradient(900px 420px at -5% 28%, rgba(22, 163, 74, 0.14), transparent 58%),
         linear-gradient(180deg, #f8fafc 0%, #fafaf9 45%, #f4f1ea 100%);
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     .startup-grid {
@@ -308,8 +309,8 @@
 
       return (
         <div className="startup-grid min-h-screen text-brand-ink">
-          <header className="sticky top-0 z-20 backdrop-blur bg-white/75 border-b border-slate-200/70">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+          <header className="md:sticky md:top-0 z-20 backdrop-blur bg-white/75 border-b border-slate-200/70">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
               <div className="flex items-center gap-3">
                 <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-mint to-brand-aqua shadow-glow"></div>
                 <div>
@@ -317,19 +318,19 @@
                   <p className="text-xs text-slate-600">Startup MVP for student notes</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 text-sm">
-                <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 border border-slate-200">
+              <div className="w-full sm:w-auto grid grid-cols-1 sm:flex sm:items-center gap-2 sm:gap-3 text-sm">
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-3 py-1 border border-slate-200">
                   <span
                     className="status-dot"
                     style={{ background: health.status === "ok" ? "#16a34a" : "#ef4444" }}
                   ></span>
                   API: {health.status === "ok" ? "online" : "offline"}
                 </span>
-                <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 border border-slate-200">
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-3 py-1 border border-slate-200">
                   <span className="status-dot" style={{ background: health.notion ? "#0ea5e9" : "#f59e0b" }}></span>
                   Notion: {health.notion ? "skonfigurowane" : "brak tokena"}
                 </span>
-                <button onClick={checkHealth} className="rounded-lg border border-slate-300 px-3 py-1.5 hover:bg-slate-50">
+                <button onClick={checkHealth} className="w-full sm:w-auto rounded-lg border border-slate-300 px-3 py-1.5 hover:bg-slate-50">
                   Odśwież status
                 </button>
               </div>
@@ -342,19 +343,19 @@
                 <p className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700">
                   MVP gotowe do testów na uczelni
                 </p>
-                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-brand-ink">
+                <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight text-brand-ink">
                   Nagraj wykład,
                   <span className="block text-brand-mint">a notatki zrobią się same.</span>
                 </h1>
-                <p className="max-w-2xl text-lg text-slate-700">
+                <p className="max-w-2xl text-base sm:text-lg text-slate-700">
                   Startupowy landing + działające studio: import nagrania z Google Drive, transkrypcja,
                   podsumowanie i eksport do Notion. Wszystko w jednym miejscu.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <a href="#studio" className="rounded-xl bg-brand-ink text-white px-5 py-3 font-semibold hover:opacity-90">
+                  <a href="#studio" className="w-full sm:w-auto text-center rounded-xl bg-brand-ink text-white px-5 py-3 font-semibold hover:opacity-90">
                     Przejdź do MVP
                   </a>
-                  <button onClick={loadPrompts} className="rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold hover:bg-slate-50">
+                  <button onClick={loadPrompts} className="w-full sm:w-auto rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold hover:bg-slate-50">
                     Odśwież prompty
                   </button>
                 </div>
@@ -399,7 +400,7 @@
               <div className="flex items-end justify-between flex-wrap gap-3">
                 <div>
                   <p className="text-sm uppercase tracking-[0.15em] text-slate-600">MVP Studio</p>
-                  <h2 className="font-display text-3xl font-bold">Landing + działające demo produktu</h2>
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold">Landing + działające demo produktu</h2>
                 </div>
               </div>
 
@@ -443,13 +444,13 @@
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    <button onClick={handleImport} disabled={busy} className="rounded-xl bg-brand-ink text-white px-4 py-2.5 font-semibold disabled:opacity-60">
+                    <button onClick={handleImport} disabled={busy} className="w-full sm:w-auto rounded-xl bg-brand-ink text-white px-4 py-2.5 font-semibold disabled:opacity-60">
                       {busy ? "Przetwarzanie..." : "Importuj i transkrybuj"}
                     </button>
-                    <button onClick={handleGenerateSummary} className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 font-semibold hover:bg-slate-50">
+                    <button onClick={handleGenerateSummary} className="w-full sm:w-auto rounded-xl border border-slate-300 bg-white px-4 py-2.5 font-semibold hover:bg-slate-50">
                       Generuj podsumowanie
                     </button>
-                    <button onClick={handleDownloadMarkdown} className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 font-semibold hover:bg-slate-50">
+                    <button onClick={handleDownloadMarkdown} className="w-full sm:w-auto rounded-xl border border-slate-300 bg-white px-4 py-2.5 font-semibold hover:bg-slate-50">
                       Pobierz .md
                     </button>
                   </div>
@@ -460,7 +461,7 @@
                       value={transcription}
                       onChange={(e) => setTranscription(e.target.value)}
                       placeholder="Tutaj pojawi się transkrypcja po imporcie..."
-                      className="w-full min-h-[280px] rounded-2xl border border-slate-300 bg-slate-50 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
+                      className="w-full min-h-[210px] sm:min-h-[280px] rounded-2xl border border-slate-300 bg-slate-50 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
                     />
                   </div>
                 </section>
@@ -477,7 +478,7 @@
                     value={summary}
                     onChange={(e) => setSummary(e.target.value)}
                     placeholder="Podsumowanie pod egzamin..."
-                    className="w-full min-h-[220px] rounded-2xl border border-slate-300 bg-slate-50 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full min-h-[190px] sm:min-h-[220px] rounded-2xl border border-slate-300 bg-slate-50 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                   />
 
                   <button
@@ -488,7 +489,7 @@
                     {busy ? "Wysyłanie..." : "Eksportuj do Notion"}
                   </button>
 
-                  <div className="grid grid-cols-3 gap-3 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
                     <div className="rounded-xl border border-slate-200 p-3 bg-slate-50">
                       <p className="text-slate-500">Słowa</p>
                       <p className="font-display text-xl font-bold">{words}</p>
@@ -510,7 +511,7 @@
                     ) : (
                       <ul className="space-y-2 text-sm">
                         {history.map((h) => (
-                          <li key={h.id} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
+                          <li key={h.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg bg-slate-50 px-3 py-2 gap-1">
                             <span className="truncate pr-2">{h.type === "import" ? "Import" : "Eksport"}: {h.title}</span>
                             <span className="text-slate-500 text-xs">{h.when}</span>
                           </li>
@@ -537,7 +538,7 @@
           </main>
 
           <footer className="border-t border-slate-200 bg-white/60">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-sm text-slate-600 flex flex-wrap items-center justify-between gap-2">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-sm text-slate-600 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-center sm:text-left">
               <p>LectureNotes AI MVP • Landing dla projektu studenckiego</p>
               <p>API: {API_BASE}</p>
             </div>
