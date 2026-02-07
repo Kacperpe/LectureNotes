@@ -1,4 +1,4 @@
-[ZADANIE GŁÓWNE]
+﻿[ZADANIE GŁÓWNE]
 Twoim zadaniem jest przetworzenie poniższej transkrypcji i stworzenie z niej maksymalnie zwięzłego streszczenia. Celem jest uchwycenie samej esencji rozmowy, ignorując wszelkie poboczne wątki i szczegóły.
 
 [SZCZEGÓŁOWE WYTYCZNE]

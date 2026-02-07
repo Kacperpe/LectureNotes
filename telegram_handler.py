@@ -1,5 +1,5 @@
 ﻿# telegram_handler.py
-# GÅ‚Ã³wny moduÅ‚ logiki bota Telegram.
+# Główny moduł logiki bota Telegram.
 
 import os
 import requests
@@ -18,7 +18,7 @@ except Exception:
     create_notion_note = None
     has_valid_token = lambda: False
 
-# --- Zmienne globalne moduÅ‚u ---
+# --- Zmienne globalne modułu ---
 prompts = {}
 przedmioty = {}
 ostatnie_zadanie = {}
@@ -28,15 +28,15 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # --- Lista komend pomocy ---
 COMMANDS = {
-    "start": "KrÃ³tka informacja o bocie / instrukcja uÅ¼ycia.",
-    "help": "WyÅ›wietla listÄ™ dostÄ™pnych komend i krÃ³tkie opisy.",
-    "jezyk": "Ustawia jÄ™zyk transkrypcji (np. pl, en, auto).",
-    "rozszerzenie": "Ustawia rozszerzenie pliku wyjÅ›ciowego (.txt, .md, .srt).",
+    "start": "Krótka informacja o bocie / instrukcja użycia.",
+    "help": "Wyświetla listę dostępnych komend i krótkie opisy.",
+    "jezyk": "Ustawia język transkrypcji (np. pl, en, auto).",
+    "rozszerzenie": "Ustawia rozszerzenie pliku wyjściowego (.txt, .md, .srt).",
 }
 
 # --- Ustawienia per-chat (persistence) ---
 def load_chat_settings():
-    """Wczytuje ustawienia chatÃ³w z pliku JSON do pamiÄ™ci."""
+    """Wczytuje ustawienia chatów z pliku JSON do pamięci."""
     global chat_settings
     try:
         if os.path.exists(_resolve_path(config.CHAT_SETTINGS_FILE)):
@@ -45,16 +45,16 @@ def load_chat_settings():
         else:
             chat_settings = {}
     except Exception as e:
-        log_status(f"BÅ‚Ä…d wczytywania ustawieÅ„ chatÃ³w: {e}")
+        log_status(f"Błąd wczytywania ustawień chatów: {e}")
         chat_settings = {}
 
 def save_chat_settings():
-    """Zapisuje aktualne ustawienia chatÃ³w do pliku JSON."""
+    """Zapisuje aktualne ustawienia chatów do pliku JSON."""
     try:
         with open(_resolve_path(config.CHAT_SETTINGS_FILE), 'w', encoding='utf-8') as f:
             json.dump(chat_settings, f, ensure_ascii=False, indent=2)
     except Exception as e:
-        log_status(f"BÅ‚Ä…d zapisu ustawieÅ„ chatÃ³w: {e}")
+        log_status(f"Błąd zapisu ustawień chatów: {e}")
 
 def get_chat_setting(chat_id, key, default=None):
     return chat_settings.get(str(chat_id), {}).get(key, default)
@@ -186,7 +186,7 @@ def inicjalizuj_bota():
         log_status("Brak lub błąd pliku ustawień chatów. Utworzę nowe podczas zapisu.")
 
 def wyslij_wiadomosc_tekstowa(tekst, chat_id, reply_markup=None):
-    """WysyÅ‚a wiadomoÅ›Ä‡ tekstowÄ… do uÅ¼ytkownika."""
+    """Wysyła wiadomość tekstową do użytkownika."""
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {'chat_id': chat_id, 'text': tekst, 'parse_mode': 'Markdown'}
     if reply_markup:
@@ -194,18 +194,18 @@ def wyslij_wiadomosc_tekstowa(tekst, chat_id, reply_markup=None):
     try:
         requests.post(url, json=payload, timeout=10)
     except requests.exceptions.RequestException as e:
-        log_status(f"BÅ‚Ä…d wysyÅ‚ania wiadomoÅ›ci: {e}")
+        log_status(f"Błąd wysyłania wiadomości: {e}")
 
-# --- Funkcje pobierania i przetwarzania plikÃ³w ---
+# --- Funkcje pobierania i przetwarzania plików ---
 
 def pobierz_plik_z_telegrama(file_id, nazwa_pliku):
-    """Pobiera plik z serwerÃ³w Telegrama na dysk."""
+    """Pobiera plik z serwerów Telegrama na dysk."""
     log_status(f"Pobieranie pliku '{nazwa_pliku}' z Telegrama...")
     try:
         url_info = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/getFile?file_id={file_id}"
         response = requests.get(url_info, timeout=10).json()
         if not response.get('ok'):
-            log_status(f"BÅ‚Ä…d przy pobieraniu informacji o pliku: {response.get('description')}")
+            log_status(f"Błąd przy pobieraniu informacji o pliku: {response.get('description')}")
             return None
         file_path = response['result']['file_path']
         url_pobierania = f"https://api.telegram.org/file/bot{TELEGRAM_TOKEN}/{file_path}"
@@ -219,7 +219,7 @@ def pobierz_plik_z_telegrama(file_id, nazwa_pliku):
             f.write(response_audio.content)
         return sciezka_zapisu
     except requests.exceptions.RequestException as e:
-        log_status(f"BÅ‚Ä…d sieciowy podczas pobierania z Telegrama: {e}")
+        log_status(f"Błąd sieciowy podczas pobierania z Telegrama: {e}")
         return None
 
 def pobierz_plik_z_gdrive(link_gdrive, chat_id):
@@ -233,32 +233,32 @@ def pobierz_plik_z_gdrive(link_gdrive, chat_id):
         
         log_status("Rozpoczynam pobieranie z gdown...")
         gdown.download(link_gdrive, sciezka_zapisu, quiet=False, fuzzy=True)
-        log_status("Pobieranie z gdown zakoÅ„czone.")
+        log_status("Pobieranie z gdown zakończone.")
         
         if os.path.exists(sciezka_zapisu):
             file_size = os.path.getsize(sciezka_zapisu)
-            log_status(f"Plik istnieje. Rozmiar: {file_size} bajtÃ³w.")
+            log_status(f"Plik istnieje. Rozmiar: {file_size} bajtów.")
             if file_size > 1000:
-                log_status("Pobieranie zakoÅ„czone sukcesem. Zwracam Å›cieÅ¼kÄ™.")
+                log_status("Pobieranie zakończone sukcesem. Zwracam ścieżkę.")
                 return sciezka_zapisu, nazwa_pliku
             else:
-                log_status("BÅÄ„D: Plik jest za maÅ‚y. Prawdopodobnie bÅ‚Ä…d pobierania.")
+                log_status("BŁĄD: Plik jest za mały. Prawdopodobnie błąd pobierania.")
                 if os.path.exists(sciezka_zapisu): os.remove(sciezka_zapisu)
-                wyslij_wiadomosc_tekstowa("âŒ BÅ‚Ä…d: Pobieranie pliku z Google Drive nie powiodÅ‚o siÄ™ (plik jest pusty). SprawdÅº uprawnienia udostÄ™pniania.", chat_id)
+                wyslij_wiadomosc_tekstowa("❌ Błąd: Pobieranie pliku z Google Drive nie powiodło się (plik jest pusty). Sprawdź uprawnienia udostępniania.", chat_id)
                 return None, None
         else:
-            log_status("BÅÄ„D: Plik nie istnieje po pobraniu.")
-            wyslij_wiadomosc_tekstowa("âŒ BÅ‚Ä…d: Pobieranie pliku z Google Drive nie powiodÅ‚o siÄ™.", chat_id)
+            log_status("BŁĄD: Plik nie istnieje po pobraniu.")
+            wyslij_wiadomosc_tekstowa("❌ Błąd: Pobieranie pliku z Google Drive nie powiodło się.", chat_id)
             return None, None
     except Exception as e:
-        log_status(f"Krytyczny bÅ‚Ä…d w funkcji pobierania z GDrive: {e}")
-        wyslij_wiadomosc_tekstowa("âŒ WystÄ…piÅ‚ bÅ‚Ä…d serwera podczas pobierania z Google Drive.", chat_id)
+        log_status(f"Krytyczny błąd w funkcji pobierania z GDrive: {e}")
+        wyslij_wiadomosc_tekstowa("❌ Wystąpił błąd serwera podczas pobierania z Google Drive.", chat_id)
         return None, None
 
         
 
 def rozpoznaj_i_przygotuj_audio(sciezka_pliku, chat_id):
-    """UÅ¼ywa ffprobe do analizy pliku, wyodrÄ™bnia audio z wideo i zwraca Å›cieÅ¼kÄ™ do pliku audio."""
+    """Używa ffprobe do analizy pliku, wyodrębnia audio z wideo i zwraca ścieżkę do pliku audio."""
     log_status(f"Analizowanie pliku medialnego: {os.path.basename(sciezka_pliku)}")
     try:
         command = ['ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_streams', sciezka_pliku]
@@ -269,32 +269,32 @@ def rozpoznaj_i_przygotuj_audio(sciezka_pliku, chat_id):
         ma_audio = any(s.get('codec_type') == 'audio' for s in info.get('streams', []))
 
         if not ma_audio:
-            wyslij_wiadomosc_tekstowa("âŒ BÅ‚Ä…d: PrzesÅ‚any plik nie zawiera Å›cieÅ¼ki dÅºwiÄ™kowej.", chat_id)
+            wyslij_wiadomosc_tekstowa("❌ Błąd: Przesłany plik nie zawiera ścieżki dźwiękowej.", chat_id)
             if os.path.exists(sciezka_pliku): os.remove(sciezka_pliku)
             return None
 
         if ma_wideo:
-            log_status("Wykryto strumieÅ„ wideo, rozpoczynam ekstrakcjÄ™ audio...")
+            log_status("Wykryto strumień wideo, rozpoczynam ekstrakcję audio...")
             sciezka_audio = os.path.splitext(sciezka_pliku)[0] + ".mp3"
             ffmpeg_cmd = ['ffmpeg', '-i', sciezka_pliku, '-vn', '-q:a', '0', '-y', sciezka_audio]
             subprocess.run(ffmpeg_cmd, check=True, capture_output=True, text=True, encoding='utf-8')
             os.remove(sciezka_pliku)
-            log_status(f"Ekstrakcja audio zakoÅ„czona: {os.path.basename(sciezka_audio)}")
+            log_status(f"Ekstrakcja audio zakończona: {os.path.basename(sciezka_audio)}")
             return sciezka_audio
         else:
             log_status("Plik jest plikiem audio, nie wymaga ekstrakcji.")
             return sciezka_pliku
     except FileNotFoundError:
-        log_status("KRYTYCZNY BÅÄ„D: `ffmpeg`/`ffprobe` nie jest zainstalowany lub nie ma go w Å›cieÅ¼ce systemowej (PATH).")
-        wyslij_wiadomosc_tekstowa("âŒ BÅ‚Ä…d serwera: Brak narzÄ™dzi do przetwarzania wideo.", chat_id)
+        log_status("KRYTYCZNY BŁĄD: `ffmpeg`/`ffprobe` nie jest zainstalowany lub nie ma go w ścieżce systemowej (PATH).")
+        wyslij_wiadomosc_tekstowa("❌ Błąd serwera: Brak narzędzi do przetwarzania wideo.", chat_id)
         if os.path.exists(sciezka_pliku): os.remove(sciezka_pliku)
         return None
     except Exception as e:
-        log_status(f"BÅ‚Ä…d podczas analizy pliku ({e}). ZakÅ‚adam, Å¼e to plik audio.")
+        log_status(f"Błąd podczas analizy pliku ({e}). Zakładam, że to plik audio.")
         return sciezka_pliku
 
 def wyslij_plik_z_notatkami(transkrypcja, notatki, chat_id, temat_notatki):
-    """Tworzy i wysyÅ‚a plik .md z notatkami, zapisujÄ…c go w odpowiednim folderze."""
+    """Tworzy i wysyła plik .md z notatkami, zapisując go w odpowiednim folderze."""
     log_status("Przygotowywanie pliku Markdown z notatkami...")
     try:
         klucz_przedmiotu = llm_handler.sklasyfikuj_notatke(notatki, przedmioty) if przedmioty else None
@@ -308,7 +308,7 @@ def wyslij_plik_z_notatkami(transkrypcja, notatki, chat_id, temat_notatki):
         nazwa_bazowa = temat_notatki.lower().replace(" ", "_")
         for znak in r'<>:"/\|?*.':
             nazwa_bazowa = nazwa_bazowa.replace(znak, '')
-        # Wybierz rozszerzenie ustawione dla chatu lub domyÅ›lne
+        # Wybierz rozszerzenie ustawione dla chatu lub domyślne
         ext = get_chat_setting(chat_id, 'extension', config.DEFAULT_OUTPUT_EXTENSION)
         if not ext.startswith('.'):
             ext = f'.{ext}'
@@ -316,7 +316,7 @@ def wyslij_plik_z_notatkami(transkrypcja, notatki, chat_id, temat_notatki):
         nazwa_pliku = f"{nazwa_bazowa}{ext}"
         sciezka_pliku = os.path.join(folder_docelowy, nazwa_pliku)
 
-        # TreÅ›Ä‡ pliku â€” jeÅ›li .md, zostaw format Markdown; w innych przypadkach zapisujemy prosty tekst
+        # Treść pliku — jeśli .md, zostaw format Markdown; w innych przypadkach zapisujemy prosty tekst
         if ext == '.md':
             zawartosc_pliku = f"# Transkrypcja\n\n{transkrypcja}\n\n---\n\n# Notatki\n\n{notatki}"
         else:
@@ -325,7 +325,7 @@ def wyslij_plik_z_notatkami(transkrypcja, notatki, chat_id, temat_notatki):
         with open(sciezka_pliku, 'w', encoding='utf-8') as f:
             f.write(zawartosc_pliku)
 
-        log_status(f"WysyÅ‚anie pliku '{nazwa_pliku}'...")
+        log_status(f"Wysyłanie pliku '{nazwa_pliku}'...")
         with open(sciezka_pliku, 'rb') as f:
             requests.post(
                 f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendDocument",
@@ -336,27 +336,27 @@ def wyslij_plik_z_notatkami(transkrypcja, notatki, chat_id, temat_notatki):
             try:
                 log_status("Eksport do Notion...")
                 create_notion_note(temat_notatki, transkrypcja, notatki or "Brak podsumowania.")
-                wyslij_wiadomosc_tekstowa("âœ… Zapisano takÅ¼e w Notion.", chat_id)
+                wyslij_wiadomosc_tekstowa("✅ Zapisano także w Notion.", chat_id)
             except Exception as e:
                 log_status(f"Notion: {e}")
-                wyslij_wiadomosc_tekstowa("â„¹ï¸ Nie udaÅ‚o siÄ™ zapisaÄ‡ w Notion (sprawdÅº token/uprawnienia).", chat_id)
+                wyslij_wiadomosc_tekstowa("ℹ️ Nie udało się zapisać w Notion (sprawdź token/uprawnienia).", chat_id)
     except Exception as e:
-        log_status(f"BÅÄ„D podczas tworzenia/wysyÅ‚ania pliku: {e}")
+        log_status(f"BŁĄD podczas tworzenia/wysyłania pliku: {e}")
 
 def wyslij_wybor_promptu(chat_id):
-    """WysyÅ‚a przyciski wyboru promptu."""
+    """Wysyła przyciski wyboru promptu."""
     przyciski = [[{"text": k.replace('_', ' ').capitalize(), "callback_data": f"prompt_{k}"}] for k in sorted(prompts.keys())]
-    # Dodaj opcjÄ™ tylko transkrypcji bez analizy AI
-    przyciski.append([{"text": "ðŸ”Š Tylko transkrypcja", "callback_data": "transcribe_only"}])
-    przyciski.append([{"text": "âœï¸ WÅ‚asny prompt", "callback_data": "prompt_custom"}])
-    przyciski.append([{"text": "âŒ Anuluj", "callback_data": "prompt_cancel"}])
+    # Dodaj opcję tylko transkrypcji bez analizy AI
+    przyciski.append([{"text": "🔊 Tylko transkrypcja", "callback_data": "transcribe_only"}])
+    przyciski.append([{"text": "✍️ Własny prompt", "callback_data": "prompt_custom"}])
+    przyciski.append([{"text": "❌ Anuluj", "callback_data": "prompt_cancel"}])
     wyslij_wiadomosc_tekstowa(
-        "âœ… Plik gotowy do przetworzenia.\n\nWybierz styl notatek:",
+        "✅ Plik gotowy do przetworzenia.\n\nWybierz styl notatek:",
         chat_id,
         reply_markup={"inline_keyboard": przyciski}
     )
 
-# --- GÅ‚Ã³wny proces przetwarzania ---
+# --- Główny proces przetwarzania ---
 
 def rozpocznij_przetwarzanie(chat_id, model_whisper, prompt_uzytkownika, transcribe_only: bool = False):
     global ostatnie_zadanie
@@ -364,57 +364,57 @@ def rozpocznij_przetwarzanie(chat_id, model_whisper, prompt_uzytkownika, transcr
     sciezka_pliku_audio = ostatnie_zadanie.get('sciezka_pliku_audio')
     
     if not sciezka_pliku_audio or not os.path.exists(sciezka_pliku_audio):
-        wyslij_wiadomosc_tekstowa("âŒ BÅ‚Ä…d: Plik audio do przetworzenia zniknÄ…Å‚. SprÃ³buj wysÅ‚aÄ‡ go ponownie.", chat_id)
+        wyslij_wiadomosc_tekstowa("❌ Błąd: Plik audio do przetworzenia zniknął. Spróbuj wysłać go ponownie.", chat_id)
         ostatnie_zadanie = {}
         return
 
-    wyslij_wiadomosc_tekstowa("Krok 1/3: Rozpoczynam transkrypcjÄ™ audio... ðŸŽ¤", chat_id)
-    # Pobierz ustawiony jÄ™zyk dla tego chatu (jeÅ›li istnieje)
+    wyslij_wiadomosc_tekstowa("Krok 1/3: Rozpoczynam transkrypcję audio... 🎤", chat_id)
+    # Pobierz ustawiony język dla tego chatu (jeśli istnieje)
     lang = get_chat_setting(chat_id, 'language', config.DEFAULT_TRANSCRIBE_LANGUAGE)
     transkrypcja = transcriber.transkrybuj_audio(sciezka_pliku_audio, model_whisper, language=lang)
     if not transkrypcja:
-        wyslij_wiadomosc_tekstowa("âŒ BÅ‚Ä…d transkrypcji. Zatrzymano przetwarzanie.", chat_id)
+        wyslij_wiadomosc_tekstowa("❌ Błąd transkrypcji. Zatrzymano przetwarzanie.", chat_id)
         ostatnie_zadanie = {}
         return
 
-    # JeÅ¼eli uÅ¼ytkownik wybraÅ‚ tylko transkrypcjÄ™ â€” zakoÅ„cz tutaj i wyÅ›lij plik z samÄ… transkrypcjÄ…
+    # Jeżeli użytkownik wybrał tylko transkrypcję — zakończ tutaj i wyślij plik z samą transkrypcją
     if transcribe_only:
-        wyslij_wiadomosc_tekstowa("Krok 2/2: ZapisujÄ™ i wysyÅ‚am samÄ… transkrypcjÄ™ (bez analizy AI).", chat_id)
+        wyslij_wiadomosc_tekstowa("Krok 2/2: Zapisuję i wysyłam samą transkrypcję (bez analizy AI).", chat_id)
         temat_transkrypcji = f"transkrypcja_{int(time.time())}"
         wyslij_plik_z_notatkami(transkrypcja, "", chat_id, temat_transkrypcji)
         ostatnie_zadanie = {}
         return
 
-    wyslij_wiadomosc_tekstowa("Krok 2/3: Przetwarzanie i synteza notatek przez AI... ðŸ§ ", chat_id)
+    wyslij_wiadomosc_tekstowa("Krok 2/3: Przetwarzanie i synteza notatek przez AI... 🧠", chat_id)
     fragmenty = llm_handler.podziel_tekst_na_fragmenty(transkrypcja)
     polaczone_notatki, success_map = llm_handler.przetworz_fragmenty_wstepnie(fragmenty, prompt_uzytkownika)
 
     if not success_map:
-        # ZMIANA: Implementacja Twojej proÅ›by o fallback (awaria Fazy "Map")
-        wyslij_wiadomosc_tekstowa("âŒ WystÄ…piÅ‚ bÅ‚Ä…d krytyczny na etapie analizy AI (Map). Otrzymasz plik z samÄ… transkrypcjÄ….", chat_id)
+        # ZMIANA: Implementacja Twojej prośby o fallback (awaria Fazy "Map")
+        wyslij_wiadomosc_tekstowa("❌ Wystąpił błąd krytyczny na etapie analizy AI (Map). Otrzymasz plik z samą transkrypcją.", chat_id)
         temat_awaryjny = llm_handler.wygeneruj_temat_notatki(transkrypcja) # Wygeneruj temat z transkrypcji
-        notatki_awaryjne = "## BÅÄ„D AI\n\nPrzetwarzanie notatek przez model AI nie powiodÅ‚o siÄ™. PoniÅ¼ej znajduje siÄ™ tylko surowa transkrypcja."
+        notatki_awaryjne = "## BŁĄD AI\n\nPrzetwarzanie notatek przez model AI nie powiodło się. Poniżej znajduje się tylko surowa transkrypcja."
         wyslij_plik_z_notatkami(transkrypcja, notatki_awaryjne, chat_id, temat_awaryjny)
         ostatnie_zadanie = {}
         return
 
     notatki_finalne, success_reduce = llm_handler.dokonaj_finalnej_syntezy(polaczone_notatki)
 
-    wyslij_wiadomosc_tekstowa("Krok 3/3: Finalizowanie i wysyÅ‚anie pliku... ðŸ“‚", chat_id)
+    wyslij_wiadomosc_tekstowa("Krok 3/3: Finalizowanie i wysyłanie pliku... 📂", chat_id)
     if success_reduce:
-        # Scenariusz pomyÅ›lny
+        # Scenariusz pomyślny
         temat_notatki = llm_handler.wygeneruj_temat_notatki(notatki_finalne)
         wyslij_plik_z_notatkami(transkrypcja, notatki_finalne, chat_id, temat_notatki)
     else:
-        # ZMIANA: Implementacja Twojej proÅ›by o fallback (awaria Fazy "Reduce")
-        wyslij_wiadomosc_tekstowa("âš ï¸ OSTRZEÅ»ENIE: Finalna synteza notatek nie powiodÅ‚a siÄ™. Otrzymasz plik z samÄ… transkrypcjÄ….", chat_id)
+        # ZMIANA: Implementacja Twojej prośby o fallback (awaria Fazy "Reduce")
+        wyslij_wiadomosc_tekstowa("⚠️ OSTRZEŻENIE: Finalna synteza notatek nie powiodła się. Otrzymasz plik z samą transkrypcją.", chat_id)
         temat_awaryjny = llm_handler.wygeneruj_temat_notatki(transkrypcja) # Wygeneruj temat z transkrypcji
-        notatki_awaryjne = "## BÅÄ„D AI\n\nPrzetwarzanie notatek przez model AI powiodÅ‚o siÄ™ czÄ™Å›ciowo (Map), ale finalna synteza (Reduce) nie powiodÅ‚a siÄ™. PoniÅ¼ej znajduje siÄ™ tylko surowa transkrypcja."
+        notatki_awaryjne = "## BŁĄD AI\n\nPrzetwarzanie notatek przez model AI powiodło się częściowo (Map), ale finalna synteza (Reduce) nie powiodła się. Poniżej znajduje się tylko surowa transkrypcja."
         wyslij_plik_z_notatkami(transkrypcja, notatki_awaryjne, chat_id, temat_awaryjny)
 
     ostatnie_zadanie = {}
 
-# --- GÅ‚Ã³wna pÄ™tla bota ---
+# --- Główna pętla bota ---
 
 def uruchom_bota(model_whisper):
     global ostatnie_zadanie
@@ -425,7 +425,7 @@ def uruchom_bota(model_whisper):
         with open(config.PLIK_PAMIECI_BOTA, "r") as f: offset = int(f.read().strip()) + 1
     except (FileNotFoundError, ValueError): pass
 
-    log_status("Bot gotowy do pracy. NasÅ‚uchiwanie...")
+    log_status("Bot gotowy do pracy. Nasłuchiwanie...")
     
     while True:
         url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/getUpdates?offset={offset}&timeout=100"
@@ -442,24 +442,24 @@ def uruchom_bota(model_whisper):
                     query = update['callback_query']
                     chat_id = query['message']['chat']['id']
                     data = query['data']
-                    # ObsÅ‚uga callbackÃ³w ustawieÅ„ (jÄ™zyk / rozszerzenie) - dziaÅ‚ajÄ… niezaleÅ¼nie od ostatniego zadania
+                    # Obsługa callbacków ustawień (język / rozszerzenie) - działają niezależnie od ostatniego zadania
                     if data.startswith('set_lang:'):
                         wartosc = data.split(':', 1)[1]
                         set_chat_setting(chat_id, 'language', wartosc)
-                        wyslij_wiadomosc_tekstowa(f"âœ… Ustawiono jÄ™zyk transkrypcji na: {wartosc}", chat_id)
+                        wyslij_wiadomosc_tekstowa(f"✅ Ustawiono język transkrypcji na: {wartosc}", chat_id)
                         continue
                     if data.startswith('set_ext:'):
                         wartosc = data.split(':', 1)[1]
                         set_chat_setting(chat_id, 'extension', wartosc)
-                        wyslij_wiadomosc_tekstowa(f"âœ… Ustawiono rozszerzenie plikÃ³w na: {wartosc}", chat_id)
+                        wyslij_wiadomosc_tekstowa(f"✅ Ustawiono rozszerzenie plików na: {wartosc}", chat_id)
                         continue
                     if not ostatnie_zadanie or ostatnie_zadanie.get('chat_id') != chat_id: continue
 
                     if data == 'prompt_custom':
                         ostatnie_zadanie['status'] = 'oczekiwanie_na_wlasny_prompt'
-                        wyslij_wiadomosc_tekstowa("ProszÄ™, napisz teraz swÃ³j wÅ‚asny prompt:", chat_id)
+                        wyslij_wiadomosc_tekstowa("Proszę, napisz teraz swój własny prompt:", chat_id)
                     elif data == 'transcribe_only':
-                        # UÅ¼ytkownik wybraÅ‚ tylko zapisaÄ‡ i wysÅ‚aÄ‡ transkrypcjÄ™ bez analizy AI
+                        # Użytkownik wybrał tylko zapisać i wysłać transkrypcję bez analizy AI
                         if ostatnie_zadanie.get('chat_id') == chat_id and ostatnie_zadanie.get('sciezka_pliku_audio'):
                             ostatnie_zadanie['status'] = 'processing'
                             threading.Thread(target=rozpocznij_przetwarzanie, args=(chat_id, model_whisper, None, True)).start()
@@ -487,19 +487,19 @@ def uruchom_bota(model_whisper):
                     plik_telegrama = message.get("audio") or message.get("voice") or message.get("document") or message.get("video")
                     if plik_telegrama:
                          if (file_size := plik_telegrama.get("file_size", 0)) > config.MAX_FILE_SIZE_TELEGRAM:
-                            wyslij_wiadomosc_tekstowa(f"âŒ Plik jest za duÅ¼y. UÅ¼yj linku z chmury.", chat_id)
+                            wyslij_wiadomosc_tekstowa(f"❌ Plik jest za duży. Użyj linku z chmury.", chat_id)
                          else:
                             pobrana_sciezka = pobierz_plik_z_telegrama(plik_telegrama['file_id'], plik_telegrama.get("file_name", "plik_telegrama.media"))
                     
                     wiadomosc_tekstowa = message.get("text", "")
-                    # Komenda /help lub /start â€” pokaÅ¼ listÄ™ dostÄ™pnych komend
+                    # Komenda /help lub /start — pokaż listę dostępnych komend
                     if isinstance(wiadomosc_tekstowa, str) and wiadomosc_tekstowa.strip().lower() in ('/help', '/start'):
-                        lines = ["DostÄ™pne komendy:"]
+                        lines = ["Dostępne komendy:"]
                         for cmd, desc in COMMANDS.items():
-                            lines.append(f"/{cmd} â€” {desc}")
+                            lines.append(f"/{cmd} — {desc}")
                         wyslij_wiadomosc_tekstowa("\n".join(lines), chat_id)
                         continue
-                    # Komenda /jezyk â€” pokaÅ¼ listÄ™ jÄ™zykÃ³w do wyboru
+                    # Komenda /jezyk — pokaż listę języków do wyboru
                     if isinstance(wiadomosc_tekstowa, str) and wiadomosc_tekstowa.strip().lower() == '/jezyk':
                         przyciski = [
                             [{"text": "Polski (pl)", "callback_data": "set_lang:pl"}],
@@ -507,10 +507,10 @@ def uruchom_bota(model_whisper):
                             [{"text": "Automatycznie (auto)", "callback_data": "set_lang:auto"}],
                             [{"text": "Anuluj", "callback_data": "prompt_cancel"}],
                         ]
-                        wyslij_wiadomosc_tekstowa("Wybierz jÄ™zyk transkrypcji:", chat_id, reply_markup={"inline_keyboard": przyciski})
+                        wyslij_wiadomosc_tekstowa("Wybierz język transkrypcji:", chat_id, reply_markup={"inline_keyboard": przyciski})
                         continue
 
-                    # Komenda /rozszerzenie â€” pokaÅ¼ listÄ™ rozszerzeÅ„
+                    # Komenda /rozszerzenie — pokaż listę rozszerzeń
                     if isinstance(wiadomosc_tekstowa, str) and wiadomosc_tekstowa.strip().lower() == '/rozszerzenie':
                         przyciski_ext = [
                             [{"text": ".md", "callback_data": "set_ext:.md"}],
@@ -518,10 +518,10 @@ def uruchom_bota(model_whisper):
                             [{"text": ".srt", "callback_data": "set_ext:.srt"}],
                             [{"text": "Anuluj", "callback_data": "prompt_cancel"}],
                         ]
-                        wyslij_wiadomosc_tekstowa("Wybierz rozszerzenie plikÃ³w z notatkami:", chat_id, reply_markup={"inline_keyboard": przyciski_ext})
+                        wyslij_wiadomosc_tekstowa("Wybierz rozszerzenie plików z notatkami:", chat_id, reply_markup={"inline_keyboard": przyciski_ext})
                         continue
                     if "http" in wiadomosc_tekstowa and not pobrana_sciezka:
-                        log_status(f"Wykryto link w wiadomoÅ›ci od {chat_id}. PrÃ³ba pobrania...")
+                        log_status(f"Wykryto link w wiadomości od {chat_id}. Próba pobrania...")
                         if "drive.google.com" in wiadomosc_tekstowa:
                             pobrana_sciezka, oryginalna_nazwa = pobierz_plik_z_gdrive(wiadomosc_tekstowa, chat_id)
                     
@@ -529,16 +529,16 @@ def uruchom_bota(model_whisper):
                         sciezka_audio = rozpoznaj_i_przygotuj_audio(pobrana_sciezka, chat_id)
                         if sciezka_audio:
                             if ostatnie_zadanie.get('status') == 'processing':
-                                wyslij_wiadomosc_tekstowa("âš ï¸ Poczekaj, aÅ¼ poprzednie zadanie zostanie ukoÅ„czone.", chat_id)
+                                wyslij_wiadomosc_tekstowa("⚠️ Poczekaj, aż poprzednie zadanie zostanie ukończone.", chat_id)
                             else:
                                 ostatnie_zadanie = {'status': 'oczekiwanie_na_wybor_promptu', 'sciezka_pliku_audio': sciezka_audio, 'chat_id': chat_id}
                                 wyslij_wybor_promptu(chat_id)
 
         except requests.exceptions.RequestException as e:
-            log_status(f"BÅ‚Ä…d poÅ‚Ä…czenia z serwerem Telegrama: {e}. PrÃ³ba za 5 sekund...")
+            log_status(f"Błąd połączenia z serwerem Telegrama: {e}. Próba za 5 sekund...")
             time.sleep(5)
         except Exception as e:
-            log_status(f"Nieoczekiwany bÅ‚Ä…d w gÅ‚Ã³wnej pÄ™tli: {e}")
+            log_status(f"Nieoczekiwany błąd w głównej pętli: {e}")
             time.sleep(5)
         finally:
             with open(config.PLIK_PAMIECI_BOTA, "w") as f:

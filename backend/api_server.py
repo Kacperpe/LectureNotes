@@ -1,4 +1,4 @@
-"""
+﻿"""
 FastAPI serwer dla VoiceNote AI:
 - /api/import-drive: pobiera plik z Google Drive, transkrybuje Whisperem i zwraca tekst.
 - /api/export-notion: wysyła transkrypcję do Notion (używa backend/notion_sync.py).

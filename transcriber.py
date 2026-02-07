@@ -1,4 +1,4 @@
-# transcriber.py
+﻿# transcriber.py
 # Moduł odpowiedzialny za obsługę modelu Whisper.
 
 import whisper

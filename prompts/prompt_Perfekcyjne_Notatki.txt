@@ -1,4 +1,4 @@
-🧩 Instrukcja dla modelu
+﻿🧩 Instrukcja dla modelu
 Twoim zadaniem jest stworzenie wysokiej jakości notatek z wykładu / transkrypcji / dokumentu PDF, które:
 🎯 Cel:
 Oddają 100% merytoryki, bez pominięć.

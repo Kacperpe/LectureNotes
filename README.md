@@ -1,4 +1,4 @@
-# VoiceNote AI – instrukcje
+﻿# VoiceNote AI – instrukcje
 
 ## Dla użytkownika (operacyjne)
 - Wymagane: Python 3.11, internet do pobierania z GDrive, token Notion (secret_…) z integracji udostępnionej bazie `2c5870e0ab6781e1a59ed0e415bf859f`.

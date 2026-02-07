@@ -1,4 +1,4 @@
-Najlepsza notatka pozwala na "skanowanie". Musisz móc rzucić okiem i wiedzieć, o co chodzi, a dopiero potem zagłębić się w szczegóły.
+﻿Najlepsza notatka pozwala na "skanowanie". Musisz móc rzucić okiem i wiedzieć, o co chodzi, a dopiero potem zagłębić się w szczegóły.
 
 Implementacja:
 

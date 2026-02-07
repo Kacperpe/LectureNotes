@@ -1,4 +1,4 @@
-"""
+﻿"""
 Prosty interfejs graficzny do transkrypcji plikow audio/wideo z uzyciem
 istniejacego modułu transcriber.py (Whisper).
 

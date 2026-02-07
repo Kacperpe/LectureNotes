@@ -1,4 +1,4 @@
-"""
+﻿"""
 Integracja z Notion dla VoiceNote AI.
 Tworzy stronę w bazie Notion z podsumowaniem i pociętą transkrypcją.
 """

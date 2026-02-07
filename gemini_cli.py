@@ -1,4 +1,4 @@
-"""
+﻿"""
 Prosty wrapper CLI do uruchamiania analizy Gemini nad plikami transkrypcji.
 Założenia:
 - W katalogu TRANSKRYPCJE_DIR trzymamy jeden plik .txt z transkrypcją.
