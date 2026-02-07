@@ -48,15 +48,23 @@
       --mint: #16a34a;
       --aqua: #0ea5e9;
       --sand: #f4f1ea;
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: rgba(255, 255, 255, 0.92);
+      --line: rgba(15, 23, 42, 0.12);
+      --line-strong: rgba(15, 23, 42, 0.2);
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
       font-family: "IBM Plex Sans", ui-sans-serif, system-ui;
       color: var(--ink);
       background:
-        radial-gradient(1200px 500px at 80% -120px, rgba(14, 165, 233, 0.18), transparent 62%),
-        radial-gradient(900px 420px at -5% 28%, rgba(22, 163, 74, 0.14), transparent 58%),
-        linear-gradient(180deg, #f8fafc 0%, #fafaf9 45%, #f4f1ea 100%);
+        radial-gradient(1300px 560px at 100% -140px, rgba(14, 165, 233, 0.23), transparent 62%),
+        radial-gradient(1000px 520px at -10% 25%, rgba(22, 163, 74, 0.17), transparent 58%),
+        linear-gradient(180deg, #f8fafc 0%, #fafaf9 48%, #f3efe6 100%);
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -66,6 +74,45 @@
         linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
       background-size: 30px 30px;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: 0.32;
+      animation: float 13s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .orb.a {
+      width: 280px;
+      height: 280px;
+      background: rgba(14, 165, 233, 0.52);
+      top: 8%;
+      right: -60px;
+    }
+
+    .orb.b {
+      width: 260px;
+      height: 260px;
+      background: rgba(22, 163, 74, 0.45);
+      bottom: 8%;
+      left: -80px;
+      animation-delay: -4.8s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(0, -18px) scale(1.05); }
     }
 
     .reveal-up {
@@ -91,6 +138,128 @@
       height: 10px;
       border-radius: 999px;
       display: inline-block;
+    }
+
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+      backdrop-filter: blur(14px);
+    }
+
+    .glass-strong {
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.13);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.86);
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #334155;
+    }
+
+    .btn-primary {
+      border-radius: 14px;
+      background: linear-gradient(120deg, #0f172a, #1f2937);
+      color: #fff;
+      font-weight: 600;
+      padding: 12px 18px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.24);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.28);
+      opacity: 0.98;
+    }
+
+    .btn-secondary {
+      border-radius: 14px;
+      border: 1px solid var(--line-strong);
+      background: rgba(255, 255, 255, 0.9);
+      color: #0f172a;
+      font-weight: 600;
+      padding: 12px 18px;
+      transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+      border-color: rgba(14, 165, 233, 0.45);
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .card-hover {
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-4px);
+      border-color: rgba(14, 165, 233, 0.35);
+      box-shadow: 0 20px 44px rgba(15, 23, 42, 0.12);
+    }
+
+    .input-modern,
+    .textarea-modern,
+    .select-modern {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(15, 23, 42, 0.2);
+      background: rgba(255, 255, 255, 0.93);
+      padding: 11px 13px;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+    }
+
+    .input-modern:focus,
+    .textarea-modern:focus,
+    .select-modern:focus {
+      outline: none;
+      border-color: rgba(14, 165, 233, 0.55);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.16);
+      background: #fff;
+    }
+
+    .textarea-modern {
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .kpi {
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(248, 250, 252, 0.95);
+      padding: 12px;
+    }
+
+    .soft-separator {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.14), transparent);
+    }
+
+    @media (max-width: 640px) {
+      .orb.a {
+        width: 180px;
+        height: 180px;
+        top: 4%;
+        right: -40px;
+      }
+
+      .orb.b {
+        width: 160px;
+        height: 160px;
+        left: -40px;
+      }
     }
   </style>
 </head>
@@ -308,40 +477,45 @@
       }
 
       return (
-        <div className="startup-grid min-h-screen text-brand-ink">
-          <header className="md:sticky md:top-0 z-20 backdrop-blur bg-white/75 border-b border-slate-200/70">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+        <div className="startup-grid min-h-screen text-brand-ink relative">
+          <div className="ambient">
+            <div className="orb a"></div>
+            <div className="orb b"></div>
+          </div>
+
+          <header className="md:sticky md:top-0 z-20 border-b border-slate-200/70 bg-white/65 backdrop-blur-xl">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 relative z-10">
               <div className="flex items-center gap-3">
                 <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-mint to-brand-aqua shadow-glow"></div>
                 <div>
-                  <p className="font-display text-lg font-bold leading-none">LectureNotes AI</p>
-                  <p className="text-xs text-slate-600">Startup MVP for student notes</p>
+                  <p className="font-display text-lg font-bold leading-none tracking-tight">LectureNotes AI</p>
+                  <p className="text-xs text-slate-600">Product demo for student note automation</p>
                 </div>
               </div>
               <div className="w-full sm:w-auto grid grid-cols-1 sm:flex sm:items-center gap-2 sm:gap-3 text-sm">
-                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-3 py-1 border border-slate-200">
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white/90 px-3 py-1 border border-slate-200">
                   <span
                     className="status-dot"
                     style={{ background: health.status === "ok" ? "#16a34a" : "#ef4444" }}
                   ></span>
                   API: {health.status === "ok" ? "online" : "offline"}
                 </span>
-                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-3 py-1 border border-slate-200">
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white/90 px-3 py-1 border border-slate-200">
                   <span className="status-dot" style={{ background: health.notion ? "#0ea5e9" : "#f59e0b" }}></span>
                   Notion: {health.notion ? "skonfigurowane" : "brak tokena"}
                 </span>
-                <button onClick={checkHealth} className="w-full sm:w-auto rounded-lg border border-slate-300 px-3 py-1.5 hover:bg-slate-50">
+                <button onClick={checkHealth} className="w-full sm:w-auto btn-secondary text-sm">
                   Odśwież status
                 </button>
               </div>
             </div>
           </header>
 
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-16">
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-16 relative z-10">
             <section className="grid lg:grid-cols-[1.1fr,0.9fr] gap-8 items-center">
               <div className="space-y-6 reveal-up">
-                <p className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700">
-                  MVP gotowe do testów na uczelni
+                <p className="brand-pill">
+                  MVP gotowe do testów na uczelni i demo inwestorskiego
                 </p>
                 <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight text-brand-ink">
                   Nagraj wykład,
@@ -352,27 +526,27 @@
                   podsumowanie i eksport do Notion. Wszystko w jednym miejscu.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <a href="#studio" className="w-full sm:w-auto text-center rounded-xl bg-brand-ink text-white px-5 py-3 font-semibold hover:opacity-90">
+                  <a href="#studio" className="w-full sm:w-auto text-center btn-primary">
                     Przejdź do MVP
                   </a>
-                  <button onClick={loadPrompts} className="w-full sm:w-auto rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold hover:bg-slate-50">
+                  <button onClick={loadPrompts} className="w-full sm:w-auto btn-secondary">
                     Odśwież prompty
                   </button>
                 </div>
               </div>
 
-              <div className="reveal-up delay-2 rounded-3xl bg-white/90 border border-slate-200 p-6 shadow-panel">
+              <div className="reveal-up delay-2 glass-strong rounded-3xl p-6 card-hover">
                 <p className="font-display text-lg font-semibold mb-4">Dlaczego to działa dla studentów?</p>
                 <div className="grid sm:grid-cols-3 gap-3 text-sm">
-                  <div className="rounded-2xl border border-slate-200 p-4 bg-slate-50">
+                  <div className="kpi">
                     <p className="text-2xl font-display font-bold text-brand-aqua">1 klik</p>
                     <p className="text-slate-700 mt-1">Import nagrania z Drive</p>
                   </div>
-                  <div className="rounded-2xl border border-slate-200 p-4 bg-slate-50">
+                  <div className="kpi">
                     <p className="text-2xl font-display font-bold text-brand-mint">{prompts.length || 0}</p>
                     <p className="text-slate-700 mt-1">Szablonów promptów</p>
                   </div>
-                  <div className="rounded-2xl border border-slate-200 p-4 bg-slate-50">
+                  <div className="kpi">
                     <p className="text-2xl font-display font-bold text-brand-ink">{estimateMinutes(transcription)}</p>
                     <p className="text-slate-700 mt-1">Min. czytania notatki</p>
                   </div>
@@ -389,7 +563,7 @@
                 ["Prompty pod egzamin", "Wybierasz styl notatek: zwięzłe, zadania, perfekcyjne."],
                 ["Eksport do Notion", "Notatka trafia do bazy i jest gotowa do dalszej nauki."],
               ].map(([title, desc]) => (
-                <article key={title} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-panel">
+                <article key={title} className="rounded-2xl glass p-5 card-hover">
                   <p className="font-display font-semibold text-lg">{title}</p>
                   <p className="mt-2 text-slate-700 text-sm">{desc}</p>
                 </article>
@@ -403,9 +577,10 @@
                   <h2 className="font-display text-2xl sm:text-3xl font-bold">Landing + działające demo produktu</h2>
                 </div>
               </div>
+              <div className="soft-separator"></div>
 
               <div className="grid xl:grid-cols-[1.05fr,0.95fr] gap-6 items-start">
-                <section className="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-panel space-y-4">
+                <section className="rounded-3xl glass p-5 sm:p-6 space-y-4">
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div className="sm:col-span-2">
                       <label className="block text-sm font-medium mb-1">Link Google Drive</label>
@@ -414,7 +589,7 @@
                         value={driveUrl}
                         onChange={(e) => setDriveUrl(e.target.value)}
                         placeholder="https://drive.google.com/..."
-                        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-sky-400"
+                        className="input-modern"
                       />
                     </div>
 
@@ -423,7 +598,7 @@
                       <select
                         value={selectedPrompt}
                         onChange={(e) => setSelectedPrompt(e.target.value)}
-                        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                        className="select-modern"
                       >
                         {!prompts.length && <option value="">Brak promptów</option>}
                         {prompts.map((p) => (
@@ -438,19 +613,19 @@
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-sky-400"
+                        className="input-modern"
                       />
                     </div>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    <button onClick={handleImport} disabled={busy} className="w-full sm:w-auto rounded-xl bg-brand-ink text-white px-4 py-2.5 font-semibold disabled:opacity-60">
+                    <button onClick={handleImport} disabled={busy} className="w-full sm:w-auto btn-primary disabled:opacity-60">
                       {busy ? "Przetwarzanie..." : "Importuj i transkrybuj"}
                     </button>
-                    <button onClick={handleGenerateSummary} className="w-full sm:w-auto rounded-xl border border-slate-300 bg-white px-4 py-2.5 font-semibold hover:bg-slate-50">
+                    <button onClick={handleGenerateSummary} className="w-full sm:w-auto btn-secondary">
                       Generuj podsumowanie
                     </button>
-                    <button onClick={handleDownloadMarkdown} className="w-full sm:w-auto rounded-xl border border-slate-300 bg-white px-4 py-2.5 font-semibold hover:bg-slate-50">
+                    <button onClick={handleDownloadMarkdown} className="w-full sm:w-auto btn-secondary">
                       Pobierz .md
                     </button>
                   </div>
@@ -461,15 +636,15 @@
                       value={transcription}
                       onChange={(e) => setTranscription(e.target.value)}
                       placeholder="Tutaj pojawi się transkrypcja po imporcie..."
-                      className="w-full min-h-[210px] sm:min-h-[280px] rounded-2xl border border-slate-300 bg-slate-50 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400"
+                      className="textarea-modern w-full min-h-[210px] sm:min-h-[280px] text-sm"
                     />
                   </div>
                 </section>
 
-                <section className="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-panel space-y-4">
+                <section className="rounded-3xl glass p-5 sm:p-6 space-y-4">
                   <div className="flex items-center justify-between gap-3">
                     <p className="font-display text-xl font-bold">Wynik dla Notion</p>
-                    <button onClick={handleCopySummary} className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm hover:bg-slate-50">
+                    <button onClick={handleCopySummary} className="btn-secondary text-sm">
                       Kopiuj
                     </button>
                   </div>
@@ -478,33 +653,33 @@
                     value={summary}
                     onChange={(e) => setSummary(e.target.value)}
                     placeholder="Podsumowanie pod egzamin..."
-                    className="w-full min-h-[190px] sm:min-h-[220px] rounded-2xl border border-slate-300 bg-slate-50 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="textarea-modern w-full min-h-[190px] sm:min-h-[220px] text-sm"
                   />
 
                   <button
                     onClick={handleExportNotion}
                     disabled={busy}
-                    className="w-full rounded-xl bg-gradient-to-r from-brand-mint to-brand-aqua text-white px-4 py-3 font-semibold disabled:opacity-60"
+                    className="w-full rounded-xl bg-gradient-to-r from-brand-mint to-brand-aqua text-white px-4 py-3 font-semibold disabled:opacity-60 transition-transform duration-200 hover:-translate-y-[1px] hover:shadow-lg"
                   >
                     {busy ? "Wysyłanie..." : "Eksportuj do Notion"}
                   </button>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                    <div className="rounded-xl border border-slate-200 p-3 bg-slate-50">
+                    <div className="kpi">
                       <p className="text-slate-500">Słowa</p>
                       <p className="font-display text-xl font-bold">{words}</p>
                     </div>
-                    <div className="rounded-xl border border-slate-200 p-3 bg-slate-50">
+                    <div className="kpi">
                       <p className="text-slate-500">Minuty czytania</p>
                       <p className="font-display text-xl font-bold">{estimateMinutes(transcription)}</p>
                     </div>
-                    <div className="rounded-xl border border-slate-200 p-3 bg-slate-50">
+                    <div className="kpi">
                       <p className="text-slate-500">Akcje</p>
                       <p className="font-display text-xl font-bold">{history.length}</p>
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-slate-200 p-4">
+                  <div className="rounded-2xl border border-slate-200/80 bg-white/60 p-4">
                     <p className="font-medium mb-2">Ostatnie akcje</p>
                     {!history.length ? (
                       <p className="text-sm text-slate-600">Brak historii — wykonaj import lub eksport.</p>
@@ -529,7 +704,7 @@
                 ["2. Daj AI pracować", "Whisper transkrybuje, a Ty redagujesz podsumowanie."],
                 ["3. Wyślij do Notion", "Jednym kliknięciem odkładasz notatkę do swojej bazy."],
               ].map(([step, desc]) => (
-                <article key={step} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-panel">
+                <article key={step} className="rounded-2xl glass p-5 card-hover">
                   <p className="font-display font-bold text-xl">{step}</p>
                   <p className="mt-2 text-slate-700 text-sm">{desc}</p>
                 </article>
@@ -537,7 +712,7 @@
             </section>
           </main>
 
-          <footer className="border-t border-slate-200 bg-white/60">
+          <footer className="border-t border-slate-200/80 bg-white/55 backdrop-blur">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-sm text-slate-600 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-center sm:text-left">
               <p>LectureNotes AI MVP • Landing dla projektu studenckiego</p>
               <p>API: {API_BASE}</p>
