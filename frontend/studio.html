@@ -542,32 +542,32 @@
               </div>
 
               <div className="reveal-up delay-2 glass-strong rounded-3xl p-6 card-hover">
-                <p className="font-display text-lg font-semibold mb-4">Dlaczego to działa dla studentów?</p>
+                <p className="font-display text-lg font-semibold mb-4">Jak to działa krok po kroku?</p>
                 <div className="grid sm:grid-cols-3 gap-3 text-sm">
                   <div className="kpi">
-                    <p className="text-2xl font-display font-bold text-brand-aqua">1 klik</p>
-                    <p className="text-slate-700 mt-1">Import nagrania z Drive</p>
+                    <p className="text-2xl font-display font-bold text-brand-aqua">1</p>
+                    <p className="text-slate-700 mt-1">Wysyłasz nagranie z Google Drive, OneDrive lub z dysku.</p>
                   </div>
                   <div className="kpi">
-                    <p className="text-2xl font-display font-bold text-brand-mint">{prompts.length || 0}</p>
-                    <p className="text-slate-700 mt-1">Szablonów promptów</p>
+                    <p className="text-2xl font-display font-bold text-brand-mint">2</p>
+                    <p className="text-slate-700 mt-1">Nagranie jest przetwarzane, a Ty wybierasz prompt dla formy notatki.</p>
                   </div>
                   <div className="kpi">
-                    <p className="text-2xl font-display font-bold text-brand-ink">{estimateMinutes(transcription)}</p>
-                    <p className="text-slate-700 mt-1">Min. czytania notatki</p>
+                    <p className="text-2xl font-display font-bold text-brand-ink">3</p>
+                    <p className="text-slate-700 mt-1">Wybierasz miejsce docelowe: Notion lub OneDrive i gotowa notatka trafia automatycznie.</p>
                   </div>
                 </div>
                 <div className="mt-4 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm text-violet-900">
-                  {message || "Gotowe do demo. Zaimportuj nagranie i przetestuj pełny flow."}
+                  {message || "Gotowe do demo. Przejdź przez 3 kroki i zobacz pełny przepływ od nagrania do gotowej notatki."}
                 </div>
               </div>
             </section>
 
             <section className="grid md:grid-cols-3 gap-4 reveal-up delay-1">
               {[
-                ["Automatyczna transkrypcja", "Whisper przetwarza nagranie i oddaje czysty tekst."],
-                ["Prompty pod egzamin", "Wybierasz styl notatek: zwięzłe, zadania, perfekcyjne."],
-                ["Eksport do Notion", "Notatka trafia do bazy i jest gotowa do dalszej nauki."],
+                ["1. Wyślij nagranie", "Dodaj materiał z Google Drive, OneDrive albo bezpośrednio z dysku."],
+                ["2. Ustaw prompt", "System przetwarza audio, a Ty wybierasz sposób przygotowania notatki."],
+                ["3. Zapisz wynik", "Wskaż Notion lub OneDrive i wstaw gotową notatkę jednym kliknięciem."],
               ].map(([title, desc]) => (
                 <article key={title} className="rounded-2xl glass p-5 card-hover">
                   <p className="font-display font-semibold text-lg">{title}</p>
