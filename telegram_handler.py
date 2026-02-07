@@ -93,6 +93,25 @@ def _read_token_from_file(path: str) -> str | None:
         return None
     return None
 
+def _find_token_in_directory(dir_path: str) -> tuple[str | None, str | None]:
+    """Skanuje katalog i zwraca (token, sciezka), jesli znajdzie token w pliku .txt."""
+    if not os.path.isdir(dir_path):
+        return None, None
+
+    try:
+        txt_files = sorted(
+            [p for p in os.listdir(dir_path) if p.lower().endswith(".txt")]
+        )
+    except Exception:
+        return None, None
+
+    for filename in txt_files:
+        full_path = os.path.join(dir_path, filename)
+        token = _read_token_from_file(full_path)
+        if token:
+            return token, full_path
+    return None, None
+
 
 def inicjalizuj_bota():
     """Wczytuje token, prompty i przedmioty na starcie."""
@@ -119,6 +138,13 @@ def inicjalizuj_bota():
                 TELEGRAM_TOKEN = token
                 log_status(f"Token bota wczytany z pliku: {candidate}")
                 break
+
+        # 3) Fallback awaryjny: przeskanuj wszystkie .txt w secrets/
+        if not TELEGRAM_TOKEN:
+            token, token_path = _find_token_in_directory(_resolve_path("secrets"))
+            if token:
+                TELEGRAM_TOKEN = token
+                log_status(f"Token bota wczytany automatycznie z: {token_path}")
 
     if not TELEGRAM_TOKEN:
         candidate_paths = [
