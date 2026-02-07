@@ -12,7 +12,9 @@ env/
 # Local secrets and env
 .env
 .env.*
-secrets/
+secrets/*
+!secrets/.gitkeep
+!secrets/README.md
 
 # Local runtime/state
 runtime/
