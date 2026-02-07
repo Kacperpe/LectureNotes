@@ -67,30 +67,6 @@
       margin: 0 auto;
     }
 
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-      background: var(--topbar-bg);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .topbar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 14px 0;
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
     .brand {
       display: flex;
       align-items: center;
@@ -161,8 +137,17 @@
       white-space: nowrap;
     }
 
+    .hero-top {
+      padding-top: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .hero {
-      padding: 64px 0 42px;
+      padding: 34px 0 42px;
       display: grid;
       gap: 26px;
       grid-template-columns: 1.12fr 0.88fr;
@@ -304,6 +289,34 @@
       gap: 12px;
     }
 
+    .demo-wrap {
+      margin-top: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      box-shadow: 0 16px 38px var(--shadow);
+      overflow: hidden;
+    }
+
+    .demo-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-strong);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .demo-frame {
+      width: 100%;
+      height: min(84vh, 960px);
+      border: 0;
+      background: #fff;
+    }
+
     .card {
       border-radius: 18px;
       border: 1px solid var(--line);
@@ -369,7 +382,7 @@
     @media (max-width: 980px) {
       .hero {
         grid-template-columns: 1fr;
-        padding-top: 48px;
+        padding-top: 22px;
       }
 
       .cards {
@@ -378,11 +391,6 @@
     }
 
     @media (max-width: 640px) {
-      .topbar-inner {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
       .hero-actions .btn-primary,
       .hero-actions .btn-secondary,
       .nav-btn,
@@ -394,6 +402,10 @@
         width: 44px;
       }
 
+      .hero-top {
+        align-items: stretch;
+      }
+
       .metric-grid,
       .cards {
         grid-template-columns: 1fr;
@@ -403,17 +415,22 @@
         flex-direction: column;
         align-items: stretch;
       }
+
+      .demo-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container topbar-inner">
+  <main class="container">
+    <div class="hero-top">
       <div class="brand">
         <span class="brand-dot" aria-hidden="true"></span>
         <span>LectureNotes AI</span>
       </div>
-      <div class="topbar-actions">
+      <div class="hero-actions">
         <button id="theme-toggle" class="nav-btn theme-icon-btn" type="button" aria-pressed="false" aria-label="Przełącz motyw">
           <svg class="theme-toggle-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"></circle>
@@ -424,79 +441,86 @@
           </svg>
           <span class="sr-only">Przełącz motyw</span>
         </button>
-        <a class="nav-btn" href="./studio.html">Otwórz MVP Studio</a>
+        <a class="nav-btn" href="#demo">Przejdź do demo</a>
       </div>
     </div>
-  </header>
 
-  <main class="container">
     <section class="hero">
       <div>
-        <span class="pill">Landing page produktu</span>
-        <h1>Nagraj wykład i zamień go w <span class="accent">czytelne notatki</span>.</h1>
+        <span class="pill">Landing + działające demo</span>
+        <h1>Nagraj wykład i pokaż klientowi <span class="accent">gotowy efekt w 3 krokach</span>.</h1>
         <p class="lead">
-          LectureNotes AI automatyzuje transkrypcję i porządkowanie wiedzy dla studentów.
-          Strona marketingowa i panel MVP są teraz rozdzielone: prezentacja produktu tutaj,
-          a pełne studio działania na osobnej stronie.
+          Jedna strona do rozmowy sprzedażowej: krótko tłumaczy flow klienta
+          i od razu pozwala przetestować działające MVP bez przechodzenia między ekranami.
         </p>
         <div class="hero-actions">
-          <a class="btn-primary" href="./studio.html">Przejdź do MVP Studio</a>
-          <a class="btn-secondary" href="#funkcje">Zobacz funkcje</a>
+          <a class="btn-primary" href="#demo">Uruchom demo</a>
+          <a class="btn-secondary" href="#jak-dziala">Jak to działa</a>
         </div>
       </div>
 
       <aside class="panel">
-        <h3>Flow produktu</h3>
+        <h3>Jak to działa dla klienta</h3>
         <div class="metric-grid">
           <div class="metric">
             <b>1</b>
-            <span>Wklej link do nagrania</span>
+            <span>Dodaje nagranie</span>
           </div>
           <div class="metric">
             <b>2</b>
-            <span>Automatyczna transkrypcja</span>
+            <span>AI robi transkrypcję i podsumowanie</span>
           </div>
           <div class="metric">
             <b>3</b>
-            <span>Eksport do Notion</span>
+            <span>Gotowa notatka ląduje w Notion</span>
           </div>
         </div>
       </aside>
     </section>
 
-    <section id="funkcje" class="section">
-      <h2>Co robi ta aplikacja</h2>
+    <section id="jak-dziala" class="section">
+      <h2>Sposób działania dla klienta</h2>
       <p class="section-sub">
-        Strona główna skupia się na prezentacji produktu i kieruje użytkownika do narzędzia.
-        Interaktywne MVP działa na osobnym ekranie, dzięki czemu UX jest czytelniejszy.
+        Klient nie musi przechodzić przez skomplikowany onboarding. Cały proces jest prosty:
+        wrzuca materiał, dostaje uporządkowaną wiedzę, zapisuje ją do swojego workflow.
       </p>
 
       <div class="cards">
         <article class="card">
-          <h4>Automatyczna transkrypcja</h4>
-          <p>Przetwarzanie nagrań wykładów do tekstu gotowego do nauki.</p>
+          <h4>1. Dostarcza nagranie</h4>
+          <p>Link z Drive lub plik audio w kilku formatach, bez ręcznego formatowania.</p>
         </article>
         <article class="card">
-          <h4>Podsumowanie pod egzamin</h4>
-          <p>Notatki są porządkowane pod szybkie powtórki i checklistę.</p>
+          <h4>2. Otrzymuje wynik AI</h4>
+          <p>Transkrypcja i podsumowanie pod cel: nauka, spotkanie, analiza lub raport.</p>
         </article>
         <article class="card">
-          <h4>Integracja z Notion</h4>
-          <p>Eksport gotowej notatki bez ręcznego przepisywania.</p>
+          <h4>3. Eksportuje jednym kliknięciem</h4>
+          <p>Notatka trafia do Notion gotowa do dalszej pracy zespołu lub studenta.</p>
         </article>
       </div>
+    </section>
 
-      <div class="cta">
-        <p>Chcesz od razu przetestować działanie? Otwórz dedykowaną stronę MVP Studio.</p>
-        <a class="btn-primary" href="./studio.html">Przejdź do Studio</a>
+    <section id="demo" class="section">
+      <h2>Działające Demo</h2>
+      <p class="section-sub">
+        Poniżej masz osadzony, interaktywny panel MVP gotowy do testu end-to-end.
+      </p>
+
+      <div class="demo-wrap">
+        <div class="demo-head">
+          <span>Demo osadzone na stronie landingowej</span>
+          <a class="nav-btn" href="./studio.html">Otwórz demo w osobnej karcie</a>
+        </div>
+        <iframe class="demo-frame" src="./studio.html" title="LectureNotes AI MVP Demo"></iframe>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="container foot">
-      <span>LectureNotes AI • Landing</span>
-      <span>Studio: /frontend/studio.html</span>
+      <span>LectureNotes AI • Landing + Demo</span>
+      <span>Ścieżka demo: /frontend/studio.html</span>
     </div>
   </footer>
 
