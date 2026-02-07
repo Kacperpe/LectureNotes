@@ -6,16 +6,147 @@
   <title>VoiceNote AI — Deep Focus</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Drobna poświata i szumy tła dla trybu “Deep Focus” */
-    .glow-green { box-shadow: 0 0 25px rgba(16, 185, 129, 0.35); }
-    .glow-blue  { box-shadow: 0 0 25px rgba(59, 130, 246, 0.25); }
+    :root {
+      --accent-rgb: 124, 58, 237;
+      --accent-soft-rgb: 168, 85, 247;
+      --bg-main: #faf7ff;
+      --bg-panel: rgba(255, 255, 255, 0.86);
+      --bg-panel-strong: rgba(255, 255, 255, 0.94);
+      --bg-chip: rgba(240, 233, 255, 0.96);
+      --text-main: #2c1454;
+      --text-soft: #5f498b;
+      --text-muted: #8064b3;
+      --text-on-accent: #f8f2ff;
+      --border: rgba(108, 71, 175, 0.26);
+      --dot-muted: rgba(108, 71, 175, 0.35);
+      --toggle-bg: rgba(255, 255, 255, 0.9);
+      --toggle-border: rgba(108, 71, 175, 0.35);
+    }
+
+    [data-theme="dark"] {
+      --accent-rgb: 168, 85, 247;
+      --accent-soft-rgb: 192, 132, 252;
+      --bg-main: #0c0616;
+      --bg-panel: rgba(21, 11, 35, 0.85);
+      --bg-panel-strong: rgba(26, 14, 43, 0.94);
+      --bg-chip: rgba(33, 18, 53, 0.95);
+      --text-main: #f3e8ff;
+      --text-soft: #dbc7fb;
+      --text-muted: #bda3e8;
+      --text-on-accent: #f8f2ff;
+      --border: rgba(199, 160, 255, 0.24);
+      --dot-muted: rgba(199, 160, 255, 0.45);
+      --toggle-bg: rgba(16, 9, 27, 0.92);
+      --toggle-border: rgba(199, 160, 255, 0.35);
+    }
+
+    .glow-green { box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.35); }
+    .glow-blue  { box-shadow: 0 0 25px rgba(var(--accent-soft-rgb), 0.25); }
     .grain {
       position: fixed; inset: 0; pointer-events: none; opacity: 0.05; mix-blend-mode: soft-light;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 40 40'%3E%3Cg fill='%23fff' fill-opacity='0.35'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3Ccircle cx='13' cy='9' r='1'/%3E%3Ccircle cx='25' cy='5' r='1'/%3E%3Ccircle cx='37' cy='13' r='1'/%3E%3Ccircle cx='9' cy='25' r='1'/%3E%3Ccircle cx='21' cy='21' r='1'/%3E%3Ccircle cx='33' cy='29' r='1'/%3E%3C/g%3E%3C/svg%3E");
     }
+
+    body {
+      color: var(--text-main) !important;
+      background:
+        radial-gradient(900px 460px at 100% -100px, rgba(var(--accent-soft-rgb), 0.26), transparent 62%),
+        radial-gradient(800px 420px at -10% 25%, rgba(var(--accent-rgb), 0.22), transparent 58%),
+        var(--bg-main) !important;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 60;
+      border: 1px solid var(--toggle-border);
+      background: var(--toggle-bg);
+      color: var(--text-main);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      padding: 8px 12px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+      border-color: rgba(var(--accent-soft-rgb), 0.6);
+    }
+
+    @media (max-width: 768px) {
+      .theme-toggle {
+        top: auto;
+        bottom: 14px;
+        right: 14px;
+      }
+    }
+
+    .bg-slate-900 { background-color: var(--bg-main) !important; }
+    .bg-slate-900\/60 { background-color: var(--bg-panel-strong) !important; }
+    .bg-slate-800,
+    .bg-slate-800\/70,
+    .bg-slate-800\/80 { background-color: var(--bg-panel) !important; }
+    .bg-slate-700,
+    .bg-slate-700\/60,
+    .bg-slate-700\/80 { background-color: var(--bg-chip) !important; }
+    .bg-slate-500 { background-color: var(--dot-muted) !important; }
+    .bg-emerald-500 { background-color: rgba(var(--accent-rgb), 0.96) !important; }
+    .bg-emerald-400 { background-color: rgba(var(--accent-soft-rgb), 0.95) !important; }
+    .bg-emerald-500\/10 { background-color: rgba(var(--accent-rgb), 0.12) !important; }
+    .bg-emerald-500\/15 { background-color: rgba(var(--accent-rgb), 0.16) !important; }
+    .bg-blue-500\/10 { background-color: rgba(var(--accent-soft-rgb), 0.14) !important; }
+
+    .text-slate-50,
+    .text-slate-100 { color: var(--text-main) !important; }
+    .text-slate-200,
+    .text-slate-300 { color: var(--text-soft) !important; }
+    .text-slate-400 { color: var(--text-muted) !important; }
+    .text-slate-900 { color: var(--text-on-accent) !important; }
+    .text-emerald-200,
+    .text-emerald-300,
+    .text-blue-200,
+    .text-blue-300 { color: rgba(var(--accent-soft-rgb), 0.95) !important; }
+
+    .border-slate-700,
+    .border-slate-600 { border-color: var(--border) !important; }
+    .border-emerald-500\/30 { border-color: rgba(var(--accent-rgb), 0.3) !important; }
+    .border-emerald-500\/40 { border-color: rgba(var(--accent-rgb), 0.42) !important; }
+    .border-blue-500\/30 { border-color: rgba(var(--accent-soft-rgb), 0.36) !important; }
+
+    .hover\:bg-slate-600:hover,
+    .hover\:bg-slate-700:hover,
+    .hover\:bg-slate-700\/60:hover,
+    .hover\:bg-slate-700\/80:hover,
+    .hover\:bg-slate-800\/80:hover { background-color: rgba(var(--accent-rgb), 0.15) !important; }
+    .hover\:bg-emerald-400:hover,
+    .hover\:bg-emerald-500\/20:hover { background-color: rgba(var(--accent-rgb), 0.22) !important; }
+    .hover\:border-emerald-500\/50:hover,
+    .hover\:border-emerald-500\/60:hover,
+    .hover\:border-blue-500\/50:hover,
+    .hover\:border-blue-500\/60:hover { border-color: rgba(var(--accent-soft-rgb), 0.62) !important; }
+
+    .from-emerald-500 {
+      --tw-gradient-from: rgba(var(--accent-rgb), 0.96) var(--tw-gradient-from-position) !important;
+      --tw-gradient-to: rgba(var(--accent-rgb), 0) var(--tw-gradient-to-position) !important;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+    }
+    .to-blue-500 {
+      --tw-gradient-to: rgba(var(--accent-soft-rgb), 0.96) var(--tw-gradient-to-position) !important;
+    }
+
+    .focus\:ring-emerald-300:focus,
+    .focus\:ring-emerald-400\/60:focus {
+      --tw-ring-color: rgba(var(--accent-soft-rgb), 0.48) !important;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-slate-900 text-slate-100 antialiased">
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">Tryb: czarno-fioletowy</button>
   <div class="grain"></div>
   <div class="flex min-h-screen">
     <!-- Sidebar -->
@@ -146,8 +277,8 @@
               <svg viewBox="0 0 600 120" class="w-full h-24">
                 <defs>
                   <linearGradient id="wave" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#10B981"/>
-                    <stop offset="100%" stop-color="#3B82F6"/>
+                    <stop offset="0%" stop-color="#7C3AED"/>
+                    <stop offset="100%" stop-color="#A855F7"/>
                   </linearGradient>
                 </defs>
                 <polyline fill="none" stroke="url(#wave)" stroke-width="3" points="
@@ -187,5 +318,30 @@
       </div>
     </main>
   </div>
+
+  <script>
+    (function () {
+      var storageKey = "legacy-theme";
+      var root = document.documentElement;
+      var button = document.getElementById("theme-toggle");
+      if (!button) return;
+
+      function applyTheme(theme) {
+        var isDark = theme === "dark";
+        root.setAttribute("data-theme", isDark ? "dark" : "light");
+        button.textContent = isDark ? "Tryb: biało-fioletowy" : "Tryb: czarno-fioletowy";
+        button.setAttribute("aria-pressed", String(isDark));
+      }
+
+      var savedTheme = localStorage.getItem(storageKey) || "light";
+      applyTheme(savedTheme);
+
+      button.addEventListener("click", function () {
+        var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        localStorage.setItem(storageKey, nextTheme);
+        applyTheme(nextTheme);
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -11,12 +11,39 @@
 
   <style>
     :root {
-      --ink: #0f172a;
-      --muted: #475569;
-      --line: rgba(15, 23, 42, 0.14);
-      --mint: #16a34a;
-      --aqua: #0ea5e9;
-      --bg: #f7fafc;
+      --ink: #2b1453;
+      --muted: #654d92;
+      --line: rgba(75, 44, 136, 0.22);
+      --accent: #7c3aed;
+      --accent-soft: #a855f7;
+      --bg-top: #fcfbff;
+      --bg-mid: #f8f4ff;
+      --bg-bottom: #efe7ff;
+      --surface: rgba(255, 255, 255, 0.86);
+      --surface-strong: rgba(255, 255, 255, 0.94);
+      --metric-bg: rgba(255, 255, 255, 0.65);
+      --topbar-bg: rgba(255, 255, 255, 0.78);
+      --button-bg: #ffffff;
+      --button-hover-border: rgba(124, 58, 237, 0.45);
+      --shadow: rgba(43, 20, 83, 0.16);
+    }
+
+    [data-theme="dark"] {
+      --ink: #f5ecff;
+      --muted: #d5c1f6;
+      --line: rgba(216, 184, 255, 0.26);
+      --accent: #a855f7;
+      --accent-soft: #c084fc;
+      --bg-top: #14081f;
+      --bg-mid: #0f0619;
+      --bg-bottom: #07030e;
+      --surface: rgba(21, 12, 34, 0.86);
+      --surface-strong: rgba(28, 15, 44, 0.94);
+      --metric-bg: rgba(36, 21, 57, 0.9);
+      --topbar-bg: rgba(16, 9, 26, 0.84);
+      --button-bg: rgba(26, 14, 42, 0.94);
+      --button-hover-border: rgba(192, 132, 252, 0.6);
+      --shadow: rgba(5, 2, 11, 0.55);
     }
 
     * { box-sizing: border-box; }
@@ -28,10 +55,11 @@
       font-family: "IBM Plex Sans", ui-sans-serif, system-ui;
       color: var(--ink);
       background:
-        radial-gradient(1100px 480px at 100% -120px, rgba(14, 165, 233, 0.2), transparent 62%),
-        radial-gradient(900px 460px at -8% 28%, rgba(22, 163, 74, 0.16), transparent 58%),
-        linear-gradient(180deg, #f8fafc 0%, #f8fafc 52%, #f3efe6 100%);
+        radial-gradient(1100px 480px at 100% -120px, rgba(168, 85, 247, 0.24), transparent 62%),
+        radial-gradient(900px 460px at -8% 28%, rgba(124, 58, 237, 0.2), transparent 58%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 52%, var(--bg-bottom) 100%);
       min-height: 100vh;
+      transition: color 0.25s ease, background 0.25s ease;
     }
 
     .container {
@@ -44,7 +72,7 @@
       top: 0;
       z-index: 20;
       backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.74);
+      background: var(--topbar-bg);
       border-bottom: 1px solid var(--line);
     }
 
@@ -54,6 +82,13 @@
       justify-content: space-between;
       gap: 12px;
       padding: 14px 0;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .brand {
@@ -69,8 +104,8 @@
       width: 34px;
       height: 34px;
       border-radius: 10px;
-      background: linear-gradient(135deg, var(--mint), var(--aqua));
-      box-shadow: 0 8px 20px rgba(14, 165, 233, 0.28);
+      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.32);
     }
 
     .nav-btn {
@@ -80,18 +115,19 @@
       text-decoration: none;
       border-radius: 12px;
       border: 1px solid var(--line);
-      background: #fff;
+      background: var(--button-bg);
       color: var(--ink);
       padding: 10px 14px;
       font-size: 14px;
       font-weight: 600;
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
     }
 
     .nav-btn:hover {
       transform: translateY(-1px);
-      border-color: rgba(14, 165, 233, 0.4);
-      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.1);
+      border-color: var(--button-hover-border);
+      box-shadow: 0 10px 22px var(--shadow);
     }
 
     .hero {
@@ -106,11 +142,11 @@
       display: inline-flex;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.88);
+      background: var(--surface-strong);
       padding: 8px 14px;
       font-size: 12px;
       font-weight: 600;
-      color: #334155;
+      color: var(--muted);
     }
 
     h1 {
@@ -121,10 +157,10 @@
       margin: 0;
     }
 
-    .accent { color: var(--mint); }
+    .accent { color: var(--accent); }
 
     .lead {
-      color: #334155;
+      color: var(--muted);
       font-size: clamp(16px, 1.4vw, 20px);
       line-height: 1.58;
       max-width: 720px;
@@ -151,33 +187,33 @@
     }
 
     .btn-primary {
-      background: linear-gradient(130deg, #0f172a, #1e293b);
+      background: linear-gradient(130deg, #4c1d95, #7c3aed);
       color: #fff;
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.26);
+      box-shadow: 0 12px 28px rgba(76, 29, 149, 0.34);
     }
 
     .btn-primary:hover {
       transform: translateY(-1px);
-      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.3);
+      box-shadow: 0 14px 32px rgba(76, 29, 149, 0.42);
     }
 
     .btn-secondary {
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.9);
+      background: var(--surface-strong);
       color: var(--ink);
     }
 
     .btn-secondary:hover {
       transform: translateY(-1px);
-      border-color: rgba(14, 165, 233, 0.45);
+      border-color: var(--button-hover-border);
     }
 
     .panel {
       border-radius: 24px;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.82);
+      background: var(--surface);
       backdrop-filter: blur(10px);
-      box-shadow: 0 16px 38px rgba(15, 23, 42, 0.12);
+      box-shadow: 0 16px 38px var(--shadow);
       padding: 22px;
     }
 
@@ -196,7 +232,7 @@
     .metric {
       border-radius: 14px;
       border: 1px solid var(--line);
-      background: #f8fafc;
+      background: var(--metric-bg);
       padding: 12px;
     }
 
@@ -225,7 +261,7 @@
     }
 
     .section-sub {
-      color: #334155;
+      color: var(--muted);
       max-width: 760px;
       margin: 0 0 24px;
       line-height: 1.55;
@@ -240,15 +276,15 @@
     .card {
       border-radius: 18px;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.86);
+      background: var(--surface);
       padding: 16px;
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
 
     .card:hover {
       transform: translateY(-3px);
-      border-color: rgba(14, 165, 233, 0.4);
-      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1);
+      border-color: var(--button-hover-border);
+      box-shadow: 0 14px 30px var(--shadow);
     }
 
     .card h4 {
@@ -268,7 +304,7 @@
       margin-top: 24px;
       border-radius: 22px;
       border: 1px solid var(--line);
-      background: linear-gradient(120deg, rgba(255,255,255,0.86), rgba(255,255,255,0.74));
+      background: linear-gradient(120deg, var(--surface-strong), var(--surface));
       backdrop-filter: blur(10px);
       padding: 22px;
       display: flex;
@@ -279,15 +315,15 @@
 
     .cta p {
       margin: 0;
-      color: #334155;
+      color: var(--muted);
     }
 
     footer {
       border-top: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.62);
+      background: var(--surface);
       backdrop-filter: blur(8px);
       padding: 18px 0;
-      color: #475569;
+      color: var(--muted);
       font-size: 14px;
     }
 
@@ -342,7 +378,12 @@
         <span class="brand-dot" aria-hidden="true"></span>
         <span>LectureNotes AI</span>
       </div>
-      <a class="nav-btn" href="./studio.html">Otwórz MVP Studio</a>
+      <div class="topbar-actions">
+        <button id="theme-toggle" class="nav-btn" type="button" aria-pressed="false">
+          Tryb: czarno-fioletowy
+        </button>
+        <a class="nav-btn" href="./studio.html">Otwórz MVP Studio</a>
+      </div>
     </div>
   </header>
 
@@ -416,5 +457,30 @@
       <span>Studio: /frontend/studio.html</span>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      var storageKey = "landing-theme";
+      var root = document.documentElement;
+      var button = document.getElementById("theme-toggle");
+      if (!button) return;
+
+      function applyTheme(theme) {
+        var isDark = theme === "dark";
+        root.setAttribute("data-theme", isDark ? "dark" : "light");
+        button.textContent = isDark ? "Tryb: biało-fioletowy" : "Tryb: czarno-fioletowy";
+        button.setAttribute("aria-pressed", String(isDark));
+      }
+
+      var savedTheme = localStorage.getItem(storageKey) || "light";
+      applyTheme(savedTheme);
+
+      button.addEventListener("click", function () {
+        var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        localStorage.setItem(storageKey, nextTheme);
+        applyTheme(nextTheme);
+      });
+    })();
+  </script>
 </body>
 </html>
