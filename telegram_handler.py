@@ -69,19 +69,19 @@ def set_chat_setting(chat_id, key, value):
 # --- Funkcje pomocnicze ---
 
 def log_status(wiadomosc):
-    """Wyswietla sformatowany komunikat o statusie modulu Handler."""
+    """Wyświetla sformatowany komunikat o statusie modułu Handler."""
     print(f"[HANDLER STATUS] {wiadomosc}")
 
 
 def _resolve_path(path: str) -> str:
-    """Zwraca sciezke absolutna; wzgledne sciezki liczy od katalogu projektu."""
+    """Zwraca ścieżkę absolutną; względne ścieżki liczy od katalogu projektu."""
     if os.path.isabs(path):
         return path
     return os.path.join(PROJECT_ROOT, path)
 
 
 def _read_token_from_file(path: str) -> str | None:
-    """Czyta token z pliku; zwraca None, jesli plik nie istnieje lub token jest nieprawidlowy."""
+    """Czyta token z pliku; zwraca None, jeśli plik nie istnieje lub token jest nieprawidłowy."""
     if not os.path.exists(path):
         return None
     try:
@@ -94,7 +94,7 @@ def _read_token_from_file(path: str) -> str | None:
     return None
 
 def _find_token_in_directory(dir_path: str) -> tuple[str | None, str | None]:
-    """Skanuje katalog i zwraca (token, sciezka), jesli znajdzie token w pliku .txt."""
+    """Skanuje katalog i zwraca (token, ścieżka), jeśli znajdzie token w pliku .txt."""
     if not os.path.isdir(dir_path):
         return None, None
 
@@ -117,7 +117,7 @@ def inicjalizuj_bota():
     """Wczytuje token, prompty i przedmioty na starcie."""
     global TELEGRAM_TOKEN, prompts, przedmioty
 
-    # 1) Preferowana metoda: zmienna srodowiskowa
+    # 1) Preferowana metoda: zmienna środowiskowa
     env_token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
     if env_token and ":" in env_token:
         TELEGRAM_TOKEN = env_token
@@ -155,14 +155,14 @@ def inicjalizuj_bota():
             _resolve_path("API token dla Zajecia_bot.txt"),
             _resolve_path("API token dla Zajęcia_bot.txt"),
         ]
-        log_status("KRYTYCZNY BLAD: Nie znaleziono tokenu Telegram bota.")
-        log_status("Utworz plik z tokenem w jednej z lokalizacji:")
+        log_status("KRYTYCZNY BŁĄD: Nie znaleziono tokenu Telegram bota.")
+        log_status("Utwórz plik z tokenem w jednej z lokalizacji:")
         for candidate in candidate_paths:
             log_status(f" - {candidate}")
-        log_status("Albo ustaw zmienna srodowiskowa TELEGRAM_BOT_TOKEN.")
+        log_status("Albo ustaw zmienną środowiskową TELEGRAM_BOT_TOKEN.")
         exit()
 
-    log_status(f"Wczytywanie promptow z folderu '{config.FOLDER_PROMPTOW}'...")
+    log_status(f"Wczytywanie promptów z folderu '{config.FOLDER_PROMPTOW}'...")
     prompts_dir = _resolve_path(config.FOLDER_PROMPTOW)
     if os.path.isdir(prompts_dir):
         for nazwa_pliku in os.listdir(prompts_dir):
@@ -172,18 +172,18 @@ def inicjalizuj_bota():
                     klucz = nazwa_pliku.replace("prompt_", "").replace(".txt", "")
                     prompts[klucz] = f.read()
 
-    log_status(f"Wczytywanie przedmiotow z pliku '{config.PLIK_PRZEDMIOTOW}'...")
+    log_status(f"Wczytywanie przedmiotów z pliku '{config.PLIK_PRZEDMIOTOW}'...")
     try:
         with open(_resolve_path(config.PLIK_PRZEDMIOTOW), 'r', encoding='utf-8') as f:
             przedmioty = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        log_status(f"OSTRZEZENIE: Nie wczytano pliku przedmiotow. Funkcja klasyfikacji bedzie niedostepna. Blad: {e}")
+        log_status(f"OSTRZEŻENIE: Nie wczytano pliku przedmiotów. Funkcja klasyfikacji będzie niedostępna. Błąd: {e}")
 
-    # Wczytaj ustawienia per-chat (jezyk, rozszerzenie)
+    # Wczytaj ustawienia per-chat (język, rozszerzenie)
     try:
         load_chat_settings()
     except Exception:
-        log_status("Brak lub blad pliku ustawien chatow. Utworze nowe podczas zapisu.")
+        log_status("Brak lub błąd pliku ustawień chatów. Utworzę nowe podczas zapisu.")
 
 def wyslij_wiadomosc_tekstowa(tekst, chat_id, reply_markup=None):
     """WysyÅ‚a wiadomoÅ›Ä‡ tekstowÄ… do uÅ¼ytkownika."""
