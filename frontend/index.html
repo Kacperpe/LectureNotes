@@ -319,34 +319,6 @@
       gap: 12px;
     }
 
-    .demo-wrap {
-      margin-top: 18px;
-      border-radius: 22px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      box-shadow: 0 16px 38px var(--shadow);
-      overflow: hidden;
-    }
-
-    .demo-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--line);
-      background: var(--surface-strong);
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .demo-frame {
-      width: 100%;
-      height: min(84vh, 960px);
-      border: 0;
-      background: #fff;
-    }
-
     .card {
       border-radius: 18px;
       border: 1px solid var(--line);
@@ -446,10 +418,6 @@
         align-items: stretch;
       }
 
-      .demo-head {
-        flex-direction: column;
-        align-items: flex-start;
-      }
     }
   </style>
 </head>
@@ -471,20 +439,20 @@
           </svg>
           <span class="sr-only">Przełącz motyw</span>
         </button>
-        <a class="nav-btn" href="#demo">Przejdź do demo</a>
+        <a class="nav-btn" href="./studio.html">Studio</a>
       </div>
     </div>
 
     <section class="hero">
       <div>
-        <span class="pill">Landing + działające demo</span>
+        <span class="pill">Landing produktu</span>
         <h1>Nagraj wykład i pokaż klientowi <span class="accent">gotowy efekt w 3 krokach</span>.</h1>
         <p class="lead">
           Jedna strona do rozmowy sprzedażowej: krótko tłumaczy flow klienta
-          i od razu pozwala przetestować działające MVP bez przechodzenia między ekranami.
+          i pokazuje, jak działa proces od nagrania do gotowej notatki.
         </p>
         <div class="hero-actions">
-          <a class="btn-primary" href="#demo">Uruchom demo</a>
+          <a class="btn-primary" href="./studio.html">Przejdź do Studio</a>
           <a class="btn-secondary" href="#jak-dziala">Jak to działa</a>
         </div>
       </div>
@@ -530,27 +498,12 @@
         </article>
       </div>
     </section>
-
-    <section id="demo" class="section">
-      <h2>Działające Demo</h2>
-      <p class="section-sub">
-        Poniżej masz osadzony, interaktywny panel MVP gotowy do testu end-to-end.
-      </p>
-
-      <div class="demo-wrap">
-        <div class="demo-head">
-          <span>Demo osadzone na stronie landingowej</span>
-          <a class="nav-btn" href="./studio.html">Otwórz demo w osobnej karcie</a>
-        </div>
-        <iframe class="demo-frame" src="./studio.html" title="LectureNotes AI MVP Demo"></iframe>
-      </div>
-    </section>
   </main>
 
   <footer>
     <div class="container foot">
-      <span>LectureNotes AI • Landing + Demo</span>
-      <span>Ścieżka demo: /frontend/studio.html</span>
+      <span>LectureNotes AI • Landing</span>
+      <span>Studio: /frontend/studio.html</span>
     </div>
   </footer>
 
