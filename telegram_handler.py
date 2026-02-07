@@ -108,6 +108,8 @@ def inicjalizuj_bota():
         candidate_paths = [
             _resolve_path(config.TELEGRAM_TOKEN_FILE),
             _resolve_path("TokenBota.txt"),
+            _resolve_path("secrets/API token dla Zajecia_bot.txt"),
+            _resolve_path("API token dla Zajecia_bot.txt"),
         ]
         for candidate in candidate_paths:
             token = _read_token_from_file(candidate)
@@ -120,6 +122,8 @@ def inicjalizuj_bota():
         candidate_paths = [
             _resolve_path(config.TELEGRAM_TOKEN_FILE),
             _resolve_path("TokenBota.txt"),
+            _resolve_path("secrets/API token dla Zajecia_bot.txt"),
+            _resolve_path("API token dla Zajecia_bot.txt"),
         ]
         log_status("KRYTYCZNY BLAD: Nie znaleziono tokenu Telegram bota.")
         log_status("Utworz plik z tokenem w jednej z lokalizacji:")
@@ -150,6 +154,7 @@ def inicjalizuj_bota():
         load_chat_settings()
     except Exception:
         log_status("Brak lub blad pliku ustawien chatow. Utworze nowe podczas zapisu.")
+
 def wyslij_wiadomosc_tekstowa(tekst, chat_id, reply_markup=None):
     """WysyÅ‚a wiadomoÅ›Ä‡ tekstowÄ… do uÅ¼ytkownika."""
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
@@ -508,4 +513,8 @@ def uruchom_bota(model_whisper):
         finally:
             with open(config.PLIK_PAMIECI_BOTA, "w") as f:
                 f.write(str(offset-1))
+
+
+
+
 
