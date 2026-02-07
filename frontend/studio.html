@@ -1,0 +1,735 @@
+﻿<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LectureNotes AI — Nagraj. Zrozum. Zdawaj.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              ink: "#0f172a",
+              coal: "#111827",
+              mint: "#16a34a",
+              aqua: "#0ea5e9",
+              cream: "#fafaf9",
+              sand: "#f4f1ea",
+            },
+          },
+          fontFamily: {
+            display: ["Space Grotesk", "ui-sans-serif", "system-ui"],
+            body: ["IBM Plex Sans", "ui-sans-serif", "system-ui"],
+          },
+          boxShadow: {
+            panel: "0 14px 40px rgba(15, 23, 42, 0.12)",
+            glow: "0 0 0 1px rgba(14, 165, 233, 0.25), 0 10px 30px rgba(14, 165, 233, 0.16)",
+          },
+        },
+      },
+    };
+  </script>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --ink: #0f172a;
+      --cream: #fafaf9;
+      --mint: #16a34a;
+      --aqua: #0ea5e9;
+      --sand: #f4f1ea;
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: rgba(255, 255, 255, 0.92);
+      --line: rgba(15, 23, 42, 0.12);
+      --line-strong: rgba(15, 23, 42, 0.2);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "IBM Plex Sans", ui-sans-serif, system-ui;
+      color: var(--ink);
+      background:
+        radial-gradient(1300px 560px at 100% -140px, rgba(14, 165, 233, 0.23), transparent 62%),
+        radial-gradient(1000px 520px at -10% 25%, rgba(22, 163, 74, 0.17), transparent 58%),
+        linear-gradient(180deg, #f8fafc 0%, #fafaf9 48%, #f3efe6 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .startup-grid {
+      background-image:
+        linear-gradient(to right, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: 0.32;
+      animation: float 13s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .orb.a {
+      width: 280px;
+      height: 280px;
+      background: rgba(14, 165, 233, 0.52);
+      top: 8%;
+      right: -60px;
+    }
+
+    .orb.b {
+      width: 260px;
+      height: 260px;
+      background: rgba(22, 163, 74, 0.45);
+      bottom: 8%;
+      left: -80px;
+      animation-delay: -4.8s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(0, -18px) scale(1.05); }
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: revealUp 0.75s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+    }
+
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .glass {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+      backdrop-filter: blur(14px);
+    }
+
+    .glass-strong {
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.13);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.86);
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #334155;
+    }
+
+    .btn-primary {
+      border-radius: 14px;
+      background: linear-gradient(120deg, #0f172a, #1f2937);
+      color: #fff;
+      font-weight: 600;
+      padding: 12px 18px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.24);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.28);
+      opacity: 0.98;
+    }
+
+    .btn-secondary {
+      border-radius: 14px;
+      border: 1px solid var(--line-strong);
+      background: rgba(255, 255, 255, 0.9);
+      color: #0f172a;
+      font-weight: 600;
+      padding: 12px 18px;
+      transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+      border-color: rgba(14, 165, 233, 0.45);
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .card-hover {
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-4px);
+      border-color: rgba(14, 165, 233, 0.35);
+      box-shadow: 0 20px 44px rgba(15, 23, 42, 0.12);
+    }
+
+    .input-modern,
+    .textarea-modern,
+    .select-modern {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(15, 23, 42, 0.2);
+      background: rgba(255, 255, 255, 0.93);
+      padding: 11px 13px;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+    }
+
+    .input-modern:focus,
+    .textarea-modern:focus,
+    .select-modern:focus {
+      outline: none;
+      border-color: rgba(14, 165, 233, 0.55);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.16);
+      background: #fff;
+    }
+
+    .textarea-modern {
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .kpi {
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(248, 250, 252, 0.95);
+      padding: 12px;
+    }
+
+    .soft-separator {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.14), transparent);
+    }
+
+    @media (max-width: 640px) {
+      .orb.a {
+        width: 180px;
+        height: 180px;
+        top: 4%;
+        right: -40px;
+      }
+
+      .orb.b {
+        width: 160px;
+        height: 160px;
+        left: -40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const API_BASE = window.API_BASE || "http://localhost:8000";
+
+    function niceDate() {
+      const d = new Date();
+      return d.toLocaleDateString("pl-PL", { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function estimateMinutes(text) {
+      const words = (text || "").trim().split(/\s+/).filter(Boolean).length;
+      return Math.max(1, Math.round(words / 140));
+    }
+
+    function buildQuickSummary(text, promptLabel) {
+      const clean = (text || "").replace(/\s+/g, " ").trim();
+      if (!clean) return "";
+
+      const sentences = clean.split(/(?<=[.!?])\s+/).filter(Boolean);
+      const first = sentences.slice(0, 4);
+      const bullets = first.map((s) => `- ${s}`);
+
+      return [
+        `## Podsumowanie (${promptLabel || "Domyślny"})`,
+        "",
+        "### Najważniejsze punkty",
+        ...(bullets.length ? bullets : ["- Brak danych wejściowych."]),
+        "",
+        "### Action items",
+        "- Powtórz kluczowe definicje i przykłady z notatki.",
+        "- Oznacz fragmenty wymagające doprecyzowania z wykładowcą.",
+        "- Przepisz zagadnienia do checklisty przed kolokwium.",
+      ].join("\n");
+    }
+
+    function App() {
+      const [health, setHealth] = React.useState({ status: "unknown", notion: false });
+      const [prompts, setPrompts] = React.useState([]);
+      const [selectedPrompt, setSelectedPrompt] = React.useState("");
+      const [driveUrl, setDriveUrl] = React.useState("");
+      const [title, setTitle] = React.useState(`Notatka ${niceDate()}`);
+      const [transcription, setTranscription] = React.useState("");
+      const [summary, setSummary] = React.useState("");
+      const [message, setMessage] = React.useState("");
+      const [busy, setBusy] = React.useState(false);
+      const [history, setHistory] = React.useState([]);
+
+      const selectedPromptObj = React.useMemo(
+        () => prompts.find((p) => p.key === selectedPrompt) || null,
+        [prompts, selectedPrompt]
+      );
+
+      const words = React.useMemo(
+        () => (transcription || "").trim().split(/\s+/).filter(Boolean).length,
+        [transcription]
+      );
+
+      async function checkHealth() {
+        try {
+          const res = await fetch(`${API_BASE}/api/health`);
+          const data = await res.json();
+          setHealth({ status: data.status || "unknown", notion: !!data.notion_token_configured });
+        } catch {
+          setHealth({ status: "offline", notion: false });
+        }
+      }
+
+      async function loadPrompts() {
+        try {
+          const res = await fetch(`${API_BASE}/api/prompts`);
+          const data = await res.json();
+          const items = Array.isArray(data.prompts) ? data.prompts : [];
+          setPrompts(items);
+          if (items.length && !selectedPrompt) {
+            setSelectedPrompt(items[0].key);
+          }
+        } catch {
+          setPrompts([]);
+        }
+      }
+
+      React.useEffect(() => {
+        checkHealth();
+        loadPrompts();
+      }, []);
+
+      async function callApi(path, payload) {
+        const res = await fetch(`${API_BASE}${path}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.error) {
+          throw new Error(data.error || "Nieznany błąd backendu");
+        }
+        return data;
+      }
+
+      async function handleImport() {
+        if (!driveUrl.trim()) {
+          setMessage("Wklej link do nagrania z Google Drive.");
+          return;
+        }
+
+        setBusy(true);
+        setMessage("Pobieranie i transkrypcja nagrania...");
+        try {
+          const data = await callApi("/api/import-drive", { drive_url: driveUrl.trim() });
+          const txt = data.transcription || "";
+          setTranscription(txt);
+
+          const draft = buildQuickSummary(txt, selectedPromptObj?.label || "Domyślny");
+          setSummary(draft);
+          setMessage("Gotowe. Transkrypcja i robocze podsumowanie są w studio.");
+
+          setHistory((prev) => [
+            {
+              id: Date.now(),
+              type: "import",
+              title: title || "Nowa notatka",
+              when: new Date().toLocaleTimeString("pl-PL"),
+              words: (txt || "").split(/\s+/).filter(Boolean).length,
+            },
+            ...prev,
+          ].slice(0, 6));
+        } catch (err) {
+          setMessage(`Błąd importu: ${err.message}`);
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function handleGenerateSummary() {
+        if (!transcription.trim()) {
+          setMessage("Najpierw zaimportuj lub wklej transkrypcję.");
+          return;
+        }
+        const draft = buildQuickSummary(transcription, selectedPromptObj?.label || "Domyślny");
+        setSummary(draft);
+        setMessage("Wygenerowano robocze podsumowanie do edycji.");
+      }
+
+      async function handleExportNotion() {
+        if (!transcription.trim()) {
+          setMessage("Brak transkrypcji do wysłania.");
+          return;
+        }
+
+        setBusy(true);
+        setMessage("Wysyłanie notatki do Notion...");
+        try {
+          const payload = {
+            title: title?.trim() || `Notatka ${niceDate()}`,
+            transcription,
+            summary: summary?.trim() || "Brak podsumowania",
+          };
+          const data = await callApi("/api/export-notion", payload);
+          setMessage(`Zapisano w Notion. ID strony: ${data.page_id || "n/d"}`);
+          setHistory((prev) => [
+            {
+              id: Date.now(),
+              type: "export",
+              title: payload.title,
+              when: new Date().toLocaleTimeString("pl-PL"),
+              words,
+            },
+            ...prev,
+          ].slice(0, 6));
+        } catch (err) {
+          setMessage(`Błąd eksportu: ${err.message}`);
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function handleCopySummary() {
+        if (!summary.trim()) {
+          setMessage("Brak podsumowania do skopiowania.");
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(summary);
+          setMessage("Podsumowanie skopiowane do schowka.");
+        } catch {
+          setMessage("Nie udało się skopiować do schowka.");
+        }
+      }
+
+      function handleDownloadMarkdown() {
+        const md = [
+          `# ${title || "Notatka"}`,
+          "",
+          summary?.trim() || "## Podsumowanie\n\nBrak podsumowania.",
+          "",
+          "---",
+          "",
+          "## Pełna transkrypcja",
+          "",
+          transcription?.trim() || "Brak transkrypcji.",
+        ].join("\n");
+
+        const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `${(title || "notatka").replace(/[^a-zA-Z0-9_-]/g, "_")}.md`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+        setMessage("Pobrano plik Markdown.");
+      }
+
+      return (
+        <div className="startup-grid min-h-screen text-brand-ink relative">
+          <div className="ambient">
+            <div className="orb a"></div>
+            <div className="orb b"></div>
+          </div>
+
+          <header className="md:sticky md:top-0 z-20 border-b border-slate-200/70 bg-white/65 backdrop-blur-xl">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 relative z-10">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-mint to-brand-aqua shadow-glow"></div>
+                <div>
+                  <p className="font-display text-lg font-bold leading-none tracking-tight">LectureNotes AI</p>
+                  <p className="text-xs text-slate-600">Product demo for student note automation</p>
+                </div>
+              </div>
+              <div className="w-full sm:w-auto grid grid-cols-1 sm:flex sm:items-center gap-2 sm:gap-3 text-sm">
+                <a
+                  href="./index.html"
+                  className="w-full sm:w-auto btn-secondary text-sm text-center"
+                >
+                  Powrót do landing
+                </a>
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white/90 px-3 py-1 border border-slate-200">
+                  <span
+                    className="status-dot"
+                    style={{ background: health.status === "ok" ? "#16a34a" : "#ef4444" }}
+                  ></span>
+                  API: {health.status === "ok" ? "online" : "offline"}
+                </span>
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white/90 px-3 py-1 border border-slate-200">
+                  <span className="status-dot" style={{ background: health.notion ? "#0ea5e9" : "#f59e0b" }}></span>
+                  Notion: {health.notion ? "skonfigurowane" : "brak tokena"}
+                </span>
+                <button onClick={checkHealth} className="w-full sm:w-auto btn-secondary text-sm">
+                  Odśwież status
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-16 relative z-10">
+            <section className="grid lg:grid-cols-[1.1fr,0.9fr] gap-8 items-center">
+              <div className="space-y-6 reveal-up">
+                <p className="brand-pill">
+                  MVP gotowe do testów na uczelni i demo inwestorskiego
+                </p>
+                <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight text-brand-ink">
+                  Nagraj wykład,
+                  <span className="block text-brand-mint">a notatki zrobią się same.</span>
+                </h1>
+                <p className="max-w-2xl text-base sm:text-lg text-slate-700">
+                  Startupowy landing + działające studio: import nagrania z Google Drive, transkrypcja,
+                  podsumowanie i eksport do Notion. Wszystko w jednym miejscu.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <a href="#studio" className="w-full sm:w-auto text-center btn-primary">
+                    Przejdź do MVP
+                  </a>
+                  <button onClick={loadPrompts} className="w-full sm:w-auto btn-secondary">
+                    Odśwież prompty
+                  </button>
+                </div>
+              </div>
+
+              <div className="reveal-up delay-2 glass-strong rounded-3xl p-6 card-hover">
+                <p className="font-display text-lg font-semibold mb-4">Dlaczego to działa dla studentów?</p>
+                <div className="grid sm:grid-cols-3 gap-3 text-sm">
+                  <div className="kpi">
+                    <p className="text-2xl font-display font-bold text-brand-aqua">1 klik</p>
+                    <p className="text-slate-700 mt-1">Import nagrania z Drive</p>
+                  </div>
+                  <div className="kpi">
+                    <p className="text-2xl font-display font-bold text-brand-mint">{prompts.length || 0}</p>
+                    <p className="text-slate-700 mt-1">Szablonów promptów</p>
+                  </div>
+                  <div className="kpi">
+                    <p className="text-2xl font-display font-bold text-brand-ink">{estimateMinutes(transcription)}</p>
+                    <p className="text-slate-700 mt-1">Min. czytania notatki</p>
+                  </div>
+                </div>
+                <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                  {message || "Gotowe do demo. Zaimportuj nagranie i przetestuj pełny flow."}
+                </div>
+              </div>
+            </section>
+
+            <section className="grid md:grid-cols-3 gap-4 reveal-up delay-1">
+              {[
+                ["Automatyczna transkrypcja", "Whisper przetwarza nagranie i oddaje czysty tekst."],
+                ["Prompty pod egzamin", "Wybierasz styl notatek: zwięzłe, zadania, perfekcyjne."],
+                ["Eksport do Notion", "Notatka trafia do bazy i jest gotowa do dalszej nauki."],
+              ].map(([title, desc]) => (
+                <article key={title} className="rounded-2xl glass p-5 card-hover">
+                  <p className="font-display font-semibold text-lg">{title}</p>
+                  <p className="mt-2 text-slate-700 text-sm">{desc}</p>
+                </article>
+              ))}
+            </section>
+
+            <section id="studio" className="space-y-5 reveal-up delay-3">
+              <div className="flex items-end justify-between flex-wrap gap-3">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.15em] text-slate-600">MVP Studio</p>
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold">Landing + działające demo produktu</h2>
+                </div>
+              </div>
+              <div className="soft-separator"></div>
+
+              <div className="grid xl:grid-cols-[1.05fr,0.95fr] gap-6 items-start">
+                <section className="rounded-3xl glass p-5 sm:p-6 space-y-4">
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <div className="sm:col-span-2">
+                      <label className="block text-sm font-medium mb-1">Link Google Drive</label>
+                      <input
+                        type="url"
+                        value={driveUrl}
+                        onChange={(e) => setDriveUrl(e.target.value)}
+                        placeholder="https://drive.google.com/..."
+                        className="input-modern"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Szablon promptu</label>
+                      <select
+                        value={selectedPrompt}
+                        onChange={(e) => setSelectedPrompt(e.target.value)}
+                        className="select-modern"
+                      >
+                        {!prompts.length && <option value="">Brak promptów</option>}
+                        {prompts.map((p) => (
+                          <option key={p.key} value={p.key}>{p.label}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Tytuł notatki</label>
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="input-modern"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <button onClick={handleImport} disabled={busy} className="w-full sm:w-auto btn-primary disabled:opacity-60">
+                      {busy ? "Przetwarzanie..." : "Importuj i transkrybuj"}
+                    </button>
+                    <button onClick={handleGenerateSummary} className="w-full sm:w-auto btn-secondary">
+                      Generuj podsumowanie
+                    </button>
+                    <button onClick={handleDownloadMarkdown} className="w-full sm:w-auto btn-secondary">
+                      Pobierz .md
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Transkrypcja</label>
+                    <textarea
+                      value={transcription}
+                      onChange={(e) => setTranscription(e.target.value)}
+                      placeholder="Tutaj pojawi się transkrypcja po imporcie..."
+                      className="textarea-modern w-full min-h-[210px] sm:min-h-[280px] text-sm"
+                    />
+                  </div>
+                </section>
+
+                <section className="rounded-3xl glass p-5 sm:p-6 space-y-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="font-display text-xl font-bold">Wynik dla Notion</p>
+                    <button onClick={handleCopySummary} className="btn-secondary text-sm">
+                      Kopiuj
+                    </button>
+                  </div>
+
+                  <textarea
+                    value={summary}
+                    onChange={(e) => setSummary(e.target.value)}
+                    placeholder="Podsumowanie pod egzamin..."
+                    className="textarea-modern w-full min-h-[190px] sm:min-h-[220px] text-sm"
+                  />
+
+                  <button
+                    onClick={handleExportNotion}
+                    disabled={busy}
+                    className="w-full rounded-xl bg-gradient-to-r from-brand-mint to-brand-aqua text-white px-4 py-3 font-semibold disabled:opacity-60 transition-transform duration-200 hover:-translate-y-[1px] hover:shadow-lg"
+                  >
+                    {busy ? "Wysyłanie..." : "Eksportuj do Notion"}
+                  </button>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                    <div className="kpi">
+                      <p className="text-slate-500">Słowa</p>
+                      <p className="font-display text-xl font-bold">{words}</p>
+                    </div>
+                    <div className="kpi">
+                      <p className="text-slate-500">Minuty czytania</p>
+                      <p className="font-display text-xl font-bold">{estimateMinutes(transcription)}</p>
+                    </div>
+                    <div className="kpi">
+                      <p className="text-slate-500">Akcje</p>
+                      <p className="font-display text-xl font-bold">{history.length}</p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-200/80 bg-white/60 p-4">
+                    <p className="font-medium mb-2">Ostatnie akcje</p>
+                    {!history.length ? (
+                      <p className="text-sm text-slate-600">Brak historii — wykonaj import lub eksport.</p>
+                    ) : (
+                      <ul className="space-y-2 text-sm">
+                        {history.map((h) => (
+                          <li key={h.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg bg-slate-50 px-3 py-2 gap-1">
+                            <span className="truncate pr-2">{h.type === "import" ? "Import" : "Eksport"}: {h.title}</span>
+                            <span className="text-slate-500 text-xs">{h.when}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </section>
+              </div>
+            </section>
+
+            <section className="grid md:grid-cols-3 gap-4 reveal-up delay-4">
+              {[
+                ["1. Wklej link", "Dodaj link Google Drive do nagrania wykładu."],
+                ["2. Daj AI pracować", "Whisper transkrybuje, a Ty redagujesz podsumowanie."],
+                ["3. Wyślij do Notion", "Jednym kliknięciem odkładasz notatkę do swojej bazy."],
+              ].map(([step, desc]) => (
+                <article key={step} className="rounded-2xl glass p-5 card-hover">
+                  <p className="font-display font-bold text-xl">{step}</p>
+                  <p className="mt-2 text-slate-700 text-sm">{desc}</p>
+                </article>
+              ))}
+            </section>
+          </main>
+
+          <footer className="border-t border-slate-200/80 bg-white/55 backdrop-blur">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-sm text-slate-600 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-center sm:text-left">
+              <p>LectureNotes AI MVP • Landing dla projektu studenckiego</p>
+              <p>API: {API_BASE}</p>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
