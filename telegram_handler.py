@@ -109,7 +109,9 @@ def inicjalizuj_bota():
             _resolve_path(config.TELEGRAM_TOKEN_FILE),
             _resolve_path("TokenBota.txt"),
             _resolve_path("secrets/API token dla Zajecia_bot.txt"),
+            _resolve_path("secrets/API token dla Zajęcia_bot.txt"),
             _resolve_path("API token dla Zajecia_bot.txt"),
+            _resolve_path("API token dla Zajęcia_bot.txt"),
         ]
         for candidate in candidate_paths:
             token = _read_token_from_file(candidate)
@@ -123,7 +125,9 @@ def inicjalizuj_bota():
             _resolve_path(config.TELEGRAM_TOKEN_FILE),
             _resolve_path("TokenBota.txt"),
             _resolve_path("secrets/API token dla Zajecia_bot.txt"),
+            _resolve_path("secrets/API token dla Zajęcia_bot.txt"),
             _resolve_path("API token dla Zajecia_bot.txt"),
+            _resolve_path("API token dla Zajęcia_bot.txt"),
         ]
         log_status("KRYTYCZNY BLAD: Nie znaleziono tokenu Telegram bota.")
         log_status("Utworz plik z tokenem w jednej z lokalizacji:")
