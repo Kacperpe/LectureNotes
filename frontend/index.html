@@ -130,6 +130,37 @@
       box-shadow: 0 10px 22px var(--shadow);
     }
 
+    .theme-icon-btn {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border-radius: 999px;
+    }
+
+    .theme-toggle-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--ink);
+      display: block;
+    }
+
+    .theme-icon-moon { display: none; }
+
+    [data-theme="dark"] .theme-icon-sun { display: none; }
+    [data-theme="dark"] .theme-icon-moon { display: block; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+      white-space: nowrap;
+    }
+
     .hero {
       padding: 64px 0 42px;
       display: grid;
@@ -359,6 +390,10 @@
         width: 100%;
       }
 
+      .theme-icon-btn {
+        width: 44px;
+      }
+
       .metric-grid,
       .cards {
         grid-template-columns: 1fr;
@@ -379,8 +414,15 @@
         <span>LectureNotes AI</span>
       </div>
       <div class="topbar-actions">
-        <button id="theme-toggle" class="nav-btn" type="button" aria-pressed="false">
-          Tryb: czarno-fioletowy
+        <button id="theme-toggle" class="nav-btn theme-icon-btn" type="button" aria-pressed="false" aria-label="Przełącz motyw">
+          <svg class="theme-toggle-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"></circle>
+            <path d="M12 2.5V5.1M12 18.9V21.5M4.9 4.9L6.8 6.8M17.2 17.2L19.1 19.1M2.5 12H5.1M18.9 12H21.5M4.9 19.1L6.8 17.2M17.2 6.8L19.1 4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+          <svg class="theme-toggle-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M19.8 14.2A8.2 8.2 0 1 1 9.8 4.2a6.7 6.7 0 1 0 10 10z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="sr-only">Przełącz motyw</span>
         </button>
         <a class="nav-btn" href="./studio.html">Otwórz MVP Studio</a>
       </div>
@@ -468,7 +510,9 @@
       function applyTheme(theme) {
         var isDark = theme === "dark";
         root.setAttribute("data-theme", isDark ? "dark" : "light");
-        button.textContent = isDark ? "Tryb: biało-fioletowy" : "Tryb: czarno-fioletowy";
+        var nextLabel = isDark ? "Przełącz na tryb biało-fioletowy" : "Przełącz na tryb czarno-fioletowy";
+        button.setAttribute("aria-label", nextLabel);
+        button.title = nextLabel;
         button.setAttribute("aria-pressed", String(isDark));
       }
 

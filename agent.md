@@ -54,5 +54,6 @@ def get(x):
 
 ## Boundaries
 - `Always`: Keep changes focused in `backend/`, `frontend/`, `prompts/`, and related root Python modules; run at least health/smoke checks after backend edits.
+- `Always`: After each completed code/content change, create a commit and push to the GitHub repository remote (`origin`) on the active branch unless explicitly told not to push.
 - `Ask first`: Adding new dependencies, changing API contracts used by frontend or Telegram bot, altering Notion schema assumptions, or changing model/runtime requirements.
 - `Never`: Commit secrets or tokens, hardcode credentials, edit `__pycache__/`, or expose files from `secrets/`.

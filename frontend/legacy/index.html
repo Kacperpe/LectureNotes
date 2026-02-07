@@ -64,10 +64,12 @@
       background: var(--toggle-bg);
       color: var(--text-main);
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      padding: 8px 12px;
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
       cursor: pointer;
       backdrop-filter: blur(8px);
       transition: transform 0.2s ease, border-color 0.2s ease;
@@ -76,6 +78,30 @@
     .theme-toggle:hover {
       transform: translateY(-1px);
       border-color: rgba(var(--accent-soft-rgb), 0.6);
+    }
+
+    .theme-toggle-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--text-main);
+      display: block;
+    }
+
+    .theme-icon-moon { display: none; }
+
+    [data-theme="dark"] .theme-icon-sun { display: none; }
+    [data-theme="dark"] .theme-icon-moon { display: block; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+      white-space: nowrap;
     }
 
     @media (max-width: 768px) {
@@ -146,7 +172,16 @@
   </style>
 </head>
 <body class="min-h-screen bg-slate-900 text-slate-100 antialiased">
-  <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">Tryb: czarno-fioletowy</button>
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Przełącz motyw">
+    <svg class="theme-toggle-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"></circle>
+      <path d="M12 2.5V5.1M12 18.9V21.5M4.9 4.9L6.8 6.8M17.2 17.2L19.1 19.1M2.5 12H5.1M18.9 12H21.5M4.9 19.1L6.8 17.2M17.2 6.8L19.1 4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+    </svg>
+    <svg class="theme-toggle-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M19.8 14.2A8.2 8.2 0 1 1 9.8 4.2a6.7 6.7 0 1 0 10 10z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+    <span class="sr-only">Przełącz motyw</span>
+  </button>
   <div class="grain"></div>
   <div class="flex min-h-screen">
     <!-- Sidebar -->
@@ -329,7 +364,9 @@
       function applyTheme(theme) {
         var isDark = theme === "dark";
         root.setAttribute("data-theme", isDark ? "dark" : "light");
-        button.textContent = isDark ? "Tryb: biało-fioletowy" : "Tryb: czarno-fioletowy";
+        var nextLabel = isDark ? "Przełącz na tryb biało-fioletowy" : "Przełącz na tryb czarno-fioletowy";
+        button.setAttribute("aria-label", nextLabel);
+        button.title = nextLabel;
         button.setAttribute("aria-pressed", String(isDark));
       }
 
