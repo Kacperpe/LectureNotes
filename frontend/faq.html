@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LectureNotes AI - FAQ</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --ink: #14213d;
+      --muted: #4d5d7a;
+      --line: rgba(20, 33, 61, 0.12);
+      --line-strong: rgba(20, 33, 61, 0.22);
+      --paper: rgba(255, 255, 255, 0.82);
+      --paper-strong: rgba(255, 255, 255, 0.93);
+      --accent: #0f766e;
+      --shadow: rgba(20, 33, 61, 0.09);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Manrope", ui-sans-serif, system-ui;
+      color: var(--ink);
+      background:
+        radial-gradient(720px 420px at 100% 0%, rgba(217, 119, 6, 0.15), transparent 62%),
+        radial-gradient(820px 460px at -10% 25%, rgba(15, 118, 110, 0.13), transparent 58%),
+        linear-gradient(180deg, #faf8f3 0%, #f5f2ea 56%, #efeade 100%);
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(20, 33, 61, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(20, 33, 61, 0.025) 1px, transparent 1px);
+      background-size: 26px 26px;
+      z-index: -1;
+    }
+    .container { width: min(1120px, calc(100% - 28px)); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper-strong);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 30px var(--shadow);
+      padding: 12px 14px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.95), rgba(217, 119, 6, 0.88));
+      box-shadow: 0 8px 18px rgba(15, 118, 110, 0.24);
+      flex: 0 0 auto;
+    }
+    .brand-title {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .brand-sub { color: var(--muted); font-size: 12px; line-height: 1.2; }
+    .top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .link-btn, .btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .link-btn:hover, .btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      box-shadow: 0 8px 18px var(--shadow);
+    }
+    .link-btn.is-active {
+      background: rgba(15, 118, 110, 0.08);
+      border-color: rgba(15, 118, 110, 0.18);
+      color: var(--accent);
+    }
+    .btn-primary {
+      background: linear-gradient(120deg, var(--accent), #0ea5a0);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 10px 22px rgba(15, 118, 110, 0.2);
+    }
+    .layout { padding: 18px 0 34px; display: grid; gap: 18px; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--paper);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 34px var(--shadow);
+      padding: 22px;
+    }
+    .hero { padding: 26px 24px 28px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 22px;
+      height: 1px;
+      background: var(--line-strong);
+    }
+    h1 {
+      margin: 0;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(30px, 4vw, 54px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      max-width: 16ch;
+    }
+    .lead {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 70ch;
+    }
+    .hero-actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .section-title {
+      margin: 0 0 6px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(22px, 2vw, 30px);
+      letter-spacing: -0.02em;
+    }
+    .section-intro { margin: 0 0 14px; color: var(--muted); line-height: 1.6; }
+    .faq-list { display: grid; gap: 10px; }
+    details {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.75);
+      padding: 4px 12px;
+    }
+    details[open] {
+      border-color: rgba(15, 118, 110, 0.18);
+      background: rgba(15, 118, 110, 0.04);
+    }
+    summary {
+      list-style: none;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 12px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: "+";
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1;
+    }
+    details[open] summary::after { content: "-"; }
+    .answer {
+      padding: 10px 0 12px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+      border-top: 1px dashed rgba(20, 33, 61, 0.08);
+      margin-top: 2px;
+    }
+    .side-stack { display: grid; gap: 14px; }
+    .info-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+    .info-list li {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 10px 12px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .info-list b { display: block; margin-bottom: 3px; color: var(--ink); }
+    .steps {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+    .steps li + li { margin-top: 6px; }
+    footer {
+      margin: 6px 0 28px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) {
+      .topbar { align-items: stretch; }
+      .top-actions, .hero-actions { width: 100%; }
+      .top-actions .link-btn, .top-actions .btn, .hero-actions .link-btn, .hero-actions .btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="LectureNotes AI - strona glowna">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <div class="brand-title">LectureNotes AI</div>
+          <div class="brand-sub">Nagranie -> transkrypcja -> uporzadkowana notatka</div>
+        </div>
+      </a>
+      <nav class="top-actions" aria-label="Nawigacja">
+        <a class="link-btn" href="./index.html">Start</a>
+        <a class="link-btn is-active" href="./faq.html" aria-current="page">FAQ</a>
+        <a class="link-btn" href="./kontakt.html">Kontakt</a>
+        <a class="link-btn" href="./studio.html">Studio</a>
+      </nav>
+    </header>
+
+    <div class="layout">
+      <section class="card hero">
+        <div class="eyebrow">FAQ / najczestsze pytania</div>
+        <h1>Najwazniejsze odpowiedzi w jednym miejscu.</h1>
+        <p class="lead">
+          Ta strona zbiera pytania, ktore najczesciej pojawiaja sie przed pierwszym uzyciem aplikacji:
+          logowanie demo, transkrypcja, prompty, eksport i integracja z Notion.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="./studio.html">Przejdz do Studio</a>
+          <a class="btn" href="./kontakt.html">Skontaktuj sie</a>
+        </div>
+      </section>
+
+      <section class="grid">
+        <section class="card">
+          <h2 class="section-title">Pytania i odpowiedzi</h2>
+          <p class="section-intro">Prosty uklad FAQ, zeby latwo dopisywac kolejne pozycje bez przebudowy strony.</p>
+          <div class="faq-list">
+            <details open>
+              <summary>Czy musze miec konto, zeby wejsc do Studio?</summary>
+              <div class="answer">W wersji demo tak. Konto jest tworzone lokalnie w przegladarce (localStorage), wiec sluzy tylko do testu przeplywu UX.</div>
+            </details>
+            <details>
+              <summary>Czy transkrypcja dzieje sie w przegladarce czy na backendzie?</summary>
+              <div class="answer">Studio wysyla zadanie do backendu API. Frontend sluzy do uruchomienia procesu, podgladu wyniku i edycji podsumowania.</div>
+            </details>
+            <details>
+              <summary>Co jesli nie mam polaczenia z Notion?</summary>
+              <div class="answer">Nadal mozesz pracowac lokalnie: skopiowac podsumowanie, pobrac Markdown albo zapisac notatke w localStorage.</div>
+            </details>
+            <details>
+              <summary>Czy moge zmienic prompt przed generowaniem podsumowania?</summary>
+              <div class="answer">Tak. W Studio jest lista promptow pobierana z backendu. Zmiana promptu wplywa na sposob przygotowania wyniku.</div>
+            </details>
+            <details>
+              <summary>Jakie dane sa zapisywane lokalnie?</summary>
+              <div class="answer">Demo konto, sesja, ustawienia synchronizacji i opcjonalnie lokalne notatki testowe. To dane tylko do testow MVP.</div>
+            </details>
+            <details>
+              <summary>Czy ten interfejs jest gotowy produkcyjnie?</summary>
+              <div class="answer">To MVP/demo. Przed produkcja trzeba dodac prawdziwe auth, bezpieczny storage i twardsza walidacje.</div>
+            </details>
+          </div>
+        </section>
+
+        <aside class="side-stack">
+          <section class="card">
+            <h2 class="section-title">Szybkie info</h2>
+            <ul class="info-list">
+              <li><b>Logowanie demo</b> Dane kont sa lokalne i testowe.</li>
+              <li><b>Eksport</b> Notion, Markdown albo zapis lokalny.</li>
+              <li><b>Prompty</b> Lista promptow pochodzi z backendu API.</li>
+            </ul>
+          </section>
+
+          <section class="card">
+            <h2 class="section-title">Jak testowac MVP</h2>
+            <ol class="steps">
+              <li>Utworz konto demo na landing page lub w Studio.</li>
+              <li>Sprawdz status API i zaladuj prompty.</li>
+              <li>Wklej link do nagrania albo recznie wklej transkrypcje.</li>
+              <li>Wygeneruj podsumowanie i przetestuj eksport.</li>
+            </ol>
+          </section>
+
+          <section class="card">
+            <h2 class="section-title">Brakuje odpowiedzi?</h2>
+            <p class="section-intro" style="margin-bottom: 10px;">Przejdz do strony kontaktu, zeby zglosic pytanie lub feedback.</p>
+            <a class="btn btn-primary" href="./kontakt.html">Przejdz do kontaktu</a>
+          </section>
+        </aside>
+      </section>
+    </div>
+
+    <footer>
+      <span>LectureNotes AI • FAQ</span>
+      <span>Frontend: <code>/frontend/faq.html</code></span>
+    </footer>
+  </main>
+</body>
+</html>
