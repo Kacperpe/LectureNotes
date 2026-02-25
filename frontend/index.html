@@ -1,545 +1,886 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LectureNotes AI - Landing</title>
+  <title>LectureNotes AI - Strona startowa</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --ink: #2b1453;
-      --muted: #654d92;
-      --line: rgba(75, 44, 136, 0.22);
-      --accent: #7c3aed;
-      --accent-soft: #a855f7;
-      --bg-top: #fcfbff;
-      --bg-mid: #f8f4ff;
-      --bg-bottom: #efe7ff;
-      --surface: rgba(255, 255, 255, 0.86);
-      --surface-strong: rgba(255, 255, 255, 0.94);
-      --metric-bg: rgba(255, 255, 255, 0.65);
-      --topbar-bg: rgba(255, 255, 255, 0.78);
-      --button-bg: #ffffff;
-      --button-hover-border: rgba(124, 58, 237, 0.45);
-      --shadow: rgba(43, 20, 83, 0.16);
-    }
-
-    [data-theme="dark"] {
-      --ink: #f5ecff;
-      --muted: #d5c1f6;
-      --line: rgba(216, 184, 255, 0.26);
-      --accent: #a855f7;
-      --accent-soft: #c084fc;
-      --bg-top: #14081f;
-      --bg-mid: #0f0619;
-      --bg-bottom: #07030e;
-      --surface: rgba(21, 12, 34, 0.86);
-      --surface-strong: rgba(28, 15, 44, 0.94);
-      --metric-bg: rgba(36, 21, 57, 0.9);
-      --topbar-bg: rgba(16, 9, 26, 0.84);
-      --button-bg: rgba(26, 14, 42, 0.94);
-      --button-hover-border: rgba(192, 132, 252, 0.6);
-      --shadow: rgba(5, 2, 11, 0.55);
+      --ink: #14213d;
+      --muted: #4d5d7a;
+      --line: rgba(20, 33, 61, 0.12);
+      --line-strong: rgba(20, 33, 61, 0.22);
+      --bg: #f8f6f1;
+      --paper: rgba(255, 255, 255, 0.82);
+      --paper-strong: rgba(255, 255, 255, 0.93);
+      --accent: #0f766e;
+      --accent-2: #d97706;
+      --accent-soft: rgba(15, 118, 110, 0.1);
+      --danger: #b91c1c;
+      --shadow: rgba(20, 33, 61, 0.09);
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      font-family: "IBM Plex Sans", ui-sans-serif, system-ui;
+      font-family: "Manrope", ui-sans-serif, system-ui;
       color: var(--ink);
       background:
-        radial-gradient(1100px 480px at 100% -120px, rgba(168, 85, 247, 0.24), transparent 62%),
-        radial-gradient(900px 460px at -8% 28%, rgba(124, 58, 237, 0.2), transparent 58%),
-        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 52%, var(--bg-bottom) 100%);
+        radial-gradient(720px 420px at 100% 0%, rgba(217, 119, 6, 0.15), transparent 62%),
+        radial-gradient(820px 460px at -10% 25%, rgba(15, 118, 110, 0.13), transparent 58%),
+        linear-gradient(180deg, #faf8f3 0%, #f5f2ea 56%, #efeade 100%);
       min-height: 100vh;
-      transition: color 0.25s ease, background 0.25s ease;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(20, 33, 61, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(20, 33, 61, 0.025) 1px, transparent 1px);
+      background-size: 26px 26px;
+      z-index: -1;
     }
 
     .container {
-      width: min(1120px, calc(100% - 32px));
+      width: min(1120px, calc(100% - 28px));
       margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--paper-strong);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 30px var(--shadow);
+      padding: 12px 14px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-family: "Space Grotesk", ui-sans-serif, system-ui;
-      font-weight: 700;
-      letter-spacing: -0.01em;
+      min-width: 0;
     }
 
-    .brand-dot {
-      width: 34px;
-      height: 34px;
+    .brand-mark {
+      width: 36px;
+      height: 36px;
       border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.32);
+      background:
+        linear-gradient(135deg, rgba(15, 118, 110, 0.95), rgba(217, 119, 6, 0.88));
+      box-shadow: 0 8px 18px rgba(15, 118, 110, 0.24);
+      flex: 0 0 auto;
     }
 
-    .nav-btn {
-      display: inline-flex;
+    .brand-title {
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-sub {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .top-actions {
+      display: flex;
       align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      border-radius: 12px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn,
+    .link-btn {
       border: 1px solid var(--line);
-      background: var(--button-bg);
+      background: #fff;
       color: var(--ink);
+      border-radius: 12px;
       padding: 10px 14px;
+      font: inherit;
       font-size: 14px;
       font-weight: 600;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      cursor: pointer;
-    }
-
-    .nav-btn:hover {
-      transform: translateY(-1px);
-      border-color: var(--button-hover-border);
-      box-shadow: 0 10px 22px var(--shadow);
-    }
-
-    .theme-icon-btn {
-      width: 44px;
-      height: 44px;
-      padding: 0;
-      border-radius: 999px;
-    }
-
-    .theme-toggle-icon {
-      width: 20px;
-      height: 20px;
-      color: var(--ink);
-      display: block;
-    }
-
-    .theme-icon-moon { display: none; }
-
-    [data-theme="dark"] .theme-icon-sun { display: none; }
-    [data-theme="dark"] .theme-icon-moon { display: block; }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-      white-space: nowrap;
-    }
-
-    .hero-top {
-      padding-top: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      position: sticky;
-      top: 12px;
-      z-index: 30;
-      padding: 12px 14px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--surface-strong);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 20px var(--shadow);
-      transition: padding 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
-    }
-
-    .hero-top-actions {
-      margin-top: 0;
-      transition: opacity 0.2s ease, transform 0.2s ease, width 0.24s ease;
-    }
-
-    body.is-scrolled .hero-top {
-      padding: 8px 12px;
-      justify-content: flex-start;
-    }
-
-    body.is-scrolled .hero-top-actions {
-      width: 0;
-      min-width: 0;
-      margin: 0;
-      opacity: 0;
-      transform: translateY(-8px);
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .hero {
-      padding: 34px 0 42px;
-      display: grid;
-      gap: 26px;
-      grid-template-columns: 1.12fr 0.88fr;
-      align-items: center;
-    }
-
-    .pill {
-      display: inline-flex;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--surface-strong);
-      padding: 8px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    h1 {
-      font-family: "Space Grotesk", ui-sans-serif, system-ui;
-      font-size: clamp(32px, 4vw, 60px);
-      line-height: 1.06;
-      letter-spacing: -0.02em;
-      margin: 0;
-    }
-
-    .accent { color: var(--accent); }
-
-    .lead {
-      color: var(--muted);
-      font-size: clamp(16px, 1.4vw, 20px);
-      line-height: 1.58;
-      max-width: 720px;
-      margin: 0;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .btn-primary,
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       text-decoration: none;
-      border-radius: 14px;
-      padding: 12px 18px;
-      font-weight: 600;
-      transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .btn:hover,
+    .link-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      box-shadow: 0 8px 18px var(--shadow);
     }
 
     .btn-primary {
-      background: linear-gradient(130deg, #4c1d95, #7c3aed);
+      background: linear-gradient(120deg, var(--accent), #0ea5a0);
       color: #fff;
-      box-shadow: 0 12px 28px rgba(76, 29, 149, 0.34);
+      border-color: transparent;
+      box-shadow: 0 10px 22px rgba(15, 118, 110, 0.2);
     }
 
     .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 32px rgba(76, 29, 149, 0.42);
+      box-shadow: 0 12px 26px rgba(15, 118, 110, 0.24);
+      border-color: transparent;
     }
 
-    .btn-secondary {
+    .page {
+      padding: 18px 0 36px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(290px, 0.9fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .column {
       border: 1px solid var(--line);
-      background: var(--surface-strong);
-      color: var(--ink);
-    }
-
-    .btn-secondary:hover {
-      transform: translateY(-1px);
-      border-color: var(--button-hover-border);
-    }
-
-    .panel {
-      border-radius: 24px;
-      border: 1px solid var(--line);
-      background: var(--surface);
+      border-radius: 22px;
+      background: var(--paper);
       backdrop-filter: blur(10px);
-      box-shadow: 0 16px 38px var(--shadow);
+      box-shadow: 0 14px 34px var(--shadow);
       padding: 22px;
     }
 
-    .panel h3 {
-      margin: 0 0 14px;
-      font-family: "Space Grotesk", ui-sans-serif, system-ui;
-      font-size: 21px;
+    .column-main {
+      padding: 26px 24px 28px;
     }
 
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .metric {
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: var(--metric-bg);
-      padding: 12px;
-    }
-
-    .metric b {
-      display: block;
-      font-family: "Space Grotesk", ui-sans-serif, system-ui;
-      font-size: 23px;
-      line-height: 1;
-      margin-bottom: 5px;
-    }
-
-    .metric span {
-      font-size: 13px;
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 22px;
+      height: 1px;
+      background: var(--line-strong);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      max-width: 18ch;
+    }
+
+    .lead {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: clamp(15px, 1.4vw, 19px);
+      line-height: 1.65;
+      max-width: 62ch;
+    }
+
+    .hero-actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero-note {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
     }
 
     .section {
-      padding: 20px 0 60px;
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
     }
 
     .section h2 {
-      font-family: "Space Grotesk", ui-sans-serif, system-ui;
-      font-size: clamp(26px, 3vw, 40px);
-      letter-spacing: -0.015em;
-      margin: 0 0 12px;
+      margin: 0 0 8px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(24px, 2.3vw, 34px);
+      letter-spacing: -0.02em;
     }
 
-    .section-sub {
+    .section-intro {
+      margin: 0 0 14px;
       color: var(--muted);
-      max-width: 760px;
-      margin: 0 0 24px;
+      line-height: 1.6;
+    }
+
+    .timeline {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .timeline li {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 12px;
+      padding: 14px 0;
+      border-top: 1px dashed rgba(20, 33, 61, 0.1);
+    }
+
+    .timeline li:first-child {
+      border-top: 0;
+      padding-top: 4px;
+    }
+
+    .step-no {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-family: "Fraunces", Georgia, serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--accent);
+      background: rgba(15, 118, 110, 0.08);
+      border: 1px solid rgba(15, 118, 110, 0.18);
+    }
+
+    .timeline h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .timeline p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .split-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .split-copy p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .list-lines {
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px dashed rgba(20, 33, 61, 0.1);
+    }
+
+    .list-lines li {
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(20, 33, 61, 0.1);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .list-lines b {
+      color: var(--ink);
+    }
+
+    .auth-panel h2 {
+      margin: 0;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    .auth-panel p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .status-box {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.74);
+      padding: 12px;
+      font-size: 14px;
       line-height: 1.55;
     }
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
+    .status-box strong {
+      display: block;
+      margin-bottom: 2px;
     }
 
-    .card {
-      border-radius: 18px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-      padding: 16px;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      border-color: var(--button-hover-border);
-      box-shadow: 0 14px 30px var(--shadow);
-    }
-
-    .card h4 {
-      margin: 0 0 8px;
-      font-family: "Space Grotesk", ui-sans-serif, system-ui;
-      font-size: 19px;
-    }
-
-    .card p {
-      margin: 0;
+    .status-box small {
       color: var(--muted);
+      display: block;
+      margin-top: 4px;
+    }
+
+    .tabs {
+      margin-top: 16px;
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .tab {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .tab[aria-selected="true"] {
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 6px 14px rgba(20, 33, 61, 0.06);
+    }
+
+    form {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid rgba(20, 33, 61, 0.16);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font: inherit;
       font-size: 14px;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--ink);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: rgba(15, 118, 110, 0.45);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .form-row .btn {
+      flex: 1 1 160px;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .form-message {
+      min-height: 20px;
+      margin: 2px 0 0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .form-message.is-error { color: var(--danger); }
+    .form-message.is-ok { color: var(--accent); }
+
+    .auth-footnote {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
       line-height: 1.5;
     }
 
-    .cta {
-      margin-top: 24px;
-      border-radius: 22px;
-      border: 1px solid var(--line);
-      background: linear-gradient(120deg, var(--surface-strong), var(--surface));
-      backdrop-filter: blur(10px);
-      padding: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+    .auth-hidden {
+      display: none;
     }
 
-    .cta p {
-      margin: 0;
+    .session-actions {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .quick-links {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .quick-links h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       color: var(--muted);
+    }
+
+    .quick-links ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .quick-links a {
+      color: var(--ink);
+      text-decoration-color: rgba(15, 118, 110, 0.35);
+      text-underline-offset: 3px;
+      font-weight: 600;
     }
 
     footer {
+      margin: 18px 0 28px;
       border-top: 1px solid var(--line);
-      background: var(--surface);
-      backdrop-filter: blur(8px);
-      padding: 18px 0;
+      padding-top: 14px;
       color: var(--muted);
-      font-size: 14px;
-    }
-
-    .foot {
+      font-size: 13px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
 
     @media (max-width: 980px) {
-      .hero {
+      .page {
         grid-template-columns: 1fr;
-        padding-top: 22px;
       }
 
-      .cards {
-        grid-template-columns: 1fr 1fr;
+      .column-side {
+        order: -1;
       }
     }
 
     @media (max-width: 640px) {
-      .hero-actions .btn-primary,
-      .hero-actions .btn-secondary,
-      .nav-btn,
-      .cta .btn-primary {
+      .topbar {
+        align-items: stretch;
+      }
+
+      .top-actions,
+      .hero-actions,
+      .session-actions {
         width: 100%;
       }
 
-      .theme-icon-btn {
-        width: 44px;
+      .top-actions .btn,
+      .top-actions .link-btn,
+      .hero-actions .btn,
+      .hero-actions .link-btn,
+      .session-actions .btn,
+      .session-actions .link-btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
       }
 
-      .hero-top {
-        align-items: stretch;
+      .timeline li {
+        grid-template-columns: 38px 1fr;
+        gap: 10px;
       }
 
-      .metric-grid,
-      .cards {
-        grid-template-columns: 1fr;
+      .step-no {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
       }
-
-      .cta {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
     }
   </style>
 </head>
 <body>
   <main class="container">
-    <div class="hero-top">
+    <header class="topbar">
       <div class="brand">
-        <span class="brand-dot" aria-hidden="true"></span>
-        <span>LectureNotes AI</span>
-      </div>
-      <div class="hero-actions hero-top-actions">
-        <button id="theme-toggle" class="nav-btn theme-icon-btn" type="button" aria-pressed="false" aria-label="Przełącz motyw">
-          <svg class="theme-toggle-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"></circle>
-            <path d="M12 2.5V5.1M12 18.9V21.5M4.9 4.9L6.8 6.8M17.2 17.2L19.1 19.1M2.5 12H5.1M18.9 12H21.5M4.9 19.1L6.8 17.2M17.2 6.8L19.1 4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
-          </svg>
-          <svg class="theme-toggle-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M19.8 14.2A8.2 8.2 0 1 1 9.8 4.2a6.7 6.7 0 1 0 10 10z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-          </svg>
-          <span class="sr-only">Przełącz motyw</span>
-        </button>
-        <a class="nav-btn" href="./studio.html">Studio</a>
-      </div>
-    </div>
-
-    <section class="hero">
-      <div>
-        <span class="pill">Landing produktu</span>
-        <h1>Nagraj wykład i pokaż klientowi <span class="accent">gotowy efekt w 3 krokach</span>.</h1>
-        <p class="lead">
-          Jedna strona do rozmowy sprzedażowej: krótko tłumaczy flow klienta
-          i pokazuje, jak działa proces od nagrania do gotowej notatki.
-        </p>
-        <div class="hero-actions">
-          <a class="btn-primary" href="./studio.html">Przejdź do Studio</a>
-          <a class="btn-secondary" href="#jak-dziala">Jak to działa</a>
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <div class="brand-title">LectureNotes AI</div>
+          <div class="brand-sub">Nagranie -> transkrypcja -> uporządkowana notatka</div>
         </div>
       </div>
+      <div class="top-actions">
+        <a class="link-btn" href="#jak-to-dziala">Jak to działa</a>
+        <a class="link-btn" href="#dla-kogo">Dla kogo</a>
+        <a class="link-btn" href="./studio.html">Studio</a>
+      </div>
+    </header>
 
-      <aside class="panel">
-        <h3>Jak to działa dla klienta</h3>
-        <div class="metric-grid">
-          <div class="metric">
-            <b>1</b>
-            <span>Dodaje nagranie</span>
+    <div class="page">
+      <section class="column column-main">
+        <div class="eyebrow">Strona tekstowa / demo</div>
+        <h1>Jedna czytelna strona, która tłumaczy produkt i prowadzi użytkownika do działania.</h1>
+        <p class="lead">
+          Zmieniłem układ na bardziej tekstowy: mniej kafelków, więcej jasnych sekcji i krótkich bloków treści.
+          Użytkownik szybciej rozumie proces, a od razu obok może założyć konto lub się zalogować.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="./studio.html">Przejdź do Studio</a>
+          <a class="btn" href="#konto">Załóż konto</a>
+        </div>
+
+        <p class="hero-note">
+          Ta wersja logowania działa lokalnie w przeglądarce (demo UI) i zapisuje konto w <code>localStorage</code>.
+          Dzięki temu możesz od razu testować przepływ wejścia na stronę i przejście do Studio.
+        </p>
+
+        <section id="jak-to-dziala" class="section">
+          <h2>Jak to działa</h2>
+          <p class="section-intro">
+            Zamiast siatki kafelków użyłem prostego opisu kroków. Każdy krok odpowiada jednej decyzji użytkownika.
+          </p>
+          <ol class="timeline">
+            <li>
+              <div class="step-no">1</div>
+              <div>
+                <h3>Użytkownik zakłada konto lub loguje się</h3>
+                <p>Na tej stronie po prawej stronie znajduje formularz. Po zalogowaniu sesja zostaje zapisana lokalnie i użytkownik może przejść dalej do Studio.</p>
+              </div>
+            </li>
+            <li>
+              <div class="step-no">2</div>
+              <div>
+                <h3>W Studio wkleja link do nagrania</h3>
+                <p>System pobiera materiał (np. z Google Drive), uruchamia transkrypcję i przygotowuje roboczą treść notatki.</p>
+              </div>
+            </li>
+            <li>
+              <div class="step-no">3</div>
+              <div>
+                <h3>Edytuje podsumowanie i eksportuje wynik</h3>
+                <p>Na końcu użytkownik poprawia treść i wysyła gotową notatkę do Notion albo pobiera ją jako plik Markdown.</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section id="dla-kogo" class="section">
+          <h2>Dla kogo jest ta aplikacja</h2>
+          <p class="section-intro">
+            Układ strony jest teraz bardziej narracyjny, więc łatwiej dopasować komunikat do odbiorcy bez przeładowania UI.
+          </p>
+          <div class="split-copy">
+            <p>
+              <strong>Studenci:</strong> nagrywają wykład, a zamiast ręcznie przepisywać materiał dostają zwięzłą notatkę do nauki.
+            </p>
+            <p>
+              <strong>Zespoły projektowe:</strong> mogą potraktować to jako szybki pipeline do porządkowania rozmów i spotkań.
+            </p>
+            <p>
+              <strong>Demo sprzedażowe:</strong> jedna strona pokazuje sens produktu, a Studio pokazuje faktyczne działanie.
+            </p>
           </div>
-          <div class="metric">
-            <b>2</b>
-            <span>AI robi transkrypcję i podsumowanie</span>
+        </section>
+
+        <section class="section">
+          <h2>Co uporządkowałem w treści</h2>
+          <p class="section-intro">
+            Zgodnie z Twoją prośbą treść została ułożona tak, żeby była czytelna, lekka i bardziej interesująca niż zwykły układ kafelkowy.
+          </p>
+          <ul class="list-lines">
+            <li><b>Mniej elementów naraz:</b> najważniejszy komunikat, potem kroki, potem szczegóły.</li>
+            <li><b>Więcej tekstu prowadzącego:</b> użytkownik rozumie co ma zrobić i po co.</li>
+            <li><b>Wyraźny punkt wejścia:</b> panel konta jest stale widoczny i naturalnie prowadzi do logowania/rejestracji.</li>
+            <li><b>Spójna nawigacja:</b> landing -> logowanie -> Studio, bez skakania między niejasnymi sekcjami.</li>
+          </ul>
+        </section>
+      </section>
+
+      <aside id="konto" class="column column-side auth-panel">
+        <h2>Konto</h2>
+        <p>Załóż konto testowe albo zaloguj się, aby wejść do Studio. Sesja jest zapisana tylko lokalnie w tej przeglądarce.</p>
+
+        <div id="session-box" class="status-box auth-hidden">
+          <strong id="session-name">Zalogowano</strong>
+          <span id="session-email"></span>
+          <small id="session-time"></small>
+          <div class="session-actions">
+            <a class="link-btn btn-primary" href="./studio.html">Otwórz Studio</a>
+            <button id="logout-btn" class="btn" type="button">Wyloguj</button>
           </div>
-          <div class="metric">
-            <b>3</b>
-            <span>Gotowa notatka ląduje w Notion</span>
+        </div>
+
+        <div id="auth-box">
+          <div class="tabs" role="tablist" aria-label="Tryb logowania">
+            <button id="tab-login" class="tab" type="button" role="tab" aria-selected="true" aria-controls="panel-login">Logowanie</button>
+            <button id="tab-register" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-register">Rejestracja</button>
           </div>
+
+          <div id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+            <form id="login-form" novalidate>
+              <label>
+                E-mail
+                <input name="email" type="email" autocomplete="email" placeholder="np. student@example.com" required />
+              </label>
+              <label>
+                Hasło
+                <input name="password" type="password" autocomplete="current-password" placeholder="Twoje hasło" required />
+              </label>
+              <div class="form-row">
+                <button class="btn btn-primary" type="submit">Zaloguj się</button>
+              </div>
+              <p id="login-message" class="form-message" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <div id="panel-register" role="tabpanel" aria-labelledby="tab-register" class="auth-hidden">
+            <form id="register-form" novalidate>
+              <label>
+                Imię lub nazwa
+                <input name="name" type="text" autocomplete="name" placeholder="np. Kacper" required />
+              </label>
+              <label>
+                E-mail
+                <input name="email" type="email" autocomplete="email" placeholder="np. student@example.com" required />
+              </label>
+              <label>
+                Hasło
+                <input name="password" type="password" autocomplete="new-password" placeholder="Min. 6 znaków" required />
+              </label>
+              <div class="form-row">
+                <button class="btn btn-primary" type="submit">Utwórz konto</button>
+              </div>
+              <p id="register-message" class="form-message" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <p class="auth-footnote">
+            Wersja demo: dane kont są przechowywane lokalnie, bez backendu i bez szyfrowania haseł.
+          </p>
+        </div>
+
+        <div class="quick-links">
+          <h3>Szybkie przejścia</h3>
+          <ul>
+            <li><a href="./studio.html">Studio (wymaga logowania)</a></li>
+            <li><a href="#jak-to-dziala">Opis działania krok po kroku</a></li>
+            <li><a href="#dla-kogo">Sekcja dla odbiorców</a></li>
+          </ul>
         </div>
       </aside>
-    </section>
-
-    <section id="jak-dziala" class="section">
-      <h2>Sposób działania dla klienta</h2>
-      <p class="section-sub">
-        Klient nie musi przechodzić przez skomplikowany onboarding. Cały proces jest prosty:
-        wrzuca materiał, dostaje uporządkowaną wiedzę, zapisuje ją do swojego workflow.
-      </p>
-
-      <div class="cards">
-        <article class="card">
-          <h4>1. Dostarcza nagranie</h4>
-          <p>Link z Drive lub plik audio w kilku formatach, bez ręcznego formatowania.</p>
-        </article>
-        <article class="card">
-          <h4>2. Otrzymuje wynik AI</h4>
-          <p>Transkrypcja i podsumowanie pod cel: nauka, spotkanie, analiza lub raport.</p>
-        </article>
-        <article class="card">
-          <h4>3. Eksportuje jednym kliknięciem</h4>
-          <p>Notatka trafia do Notion gotowa do dalszej pracy zespołu lub studenta.</p>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container foot">
-      <span>LectureNotes AI • Landing</span>
-      <span>Studio: /frontend/studio.html</span>
     </div>
-  </footer>
+
+    <footer>
+      <span>LectureNotes AI • Landing tekstowy + konto demo</span>
+      <span>Frontend: <code>/frontend/index.html</code> • Studio: <code>/frontend/studio.html</code></span>
+    </footer>
+  </main>
 
   <script>
     (function () {
-      var storageKey = "landing-theme";
-      var root = document.documentElement;
-      var button = document.getElementById("theme-toggle");
-      var heroTop = document.querySelector(".hero-top");
-      if (!button) return;
+      var USERS_KEY = "lnai-users-v1";
+      var SESSION_KEY = "lnai-session-v1";
 
-      function applyTheme(theme) {
-        var isDark = theme === "dark";
-        root.setAttribute("data-theme", isDark ? "dark" : "light");
-        var nextLabel = isDark ? "Przełącz na tryb biało-fioletowy" : "Przełącz na tryb czarno-fioletowy";
-        button.setAttribute("aria-label", nextLabel);
-        button.title = nextLabel;
-        button.setAttribute("aria-pressed", String(isDark));
+      var tabLogin = document.getElementById("tab-login");
+      var tabRegister = document.getElementById("tab-register");
+      var panelLogin = document.getElementById("panel-login");
+      var panelRegister = document.getElementById("panel-register");
+      var loginForm = document.getElementById("login-form");
+      var registerForm = document.getElementById("register-form");
+      var loginMessage = document.getElementById("login-message");
+      var registerMessage = document.getElementById("register-message");
+      var authBox = document.getElementById("auth-box");
+      var sessionBox = document.getElementById("session-box");
+      var sessionName = document.getElementById("session-name");
+      var sessionEmail = document.getElementById("session-email");
+      var sessionTime = document.getElementById("session-time");
+      var logoutBtn = document.getElementById("logout-btn");
+
+      function safeParse(raw, fallback) {
+        try {
+          var parsed = JSON.parse(raw);
+          return parsed == null ? fallback : parsed;
+        } catch (_) {
+          return fallback;
+        }
       }
 
-      var savedTheme = localStorage.getItem(storageKey) || "light";
-      applyTheme(savedTheme);
-
-      function syncTopPanelState() {
-        if (!heroTop) return;
-        document.body.classList.toggle("is-scrolled", window.scrollY > 16);
+      function loadUsers() {
+        return safeParse(localStorage.getItem(USERS_KEY), []);
       }
 
-      syncTopPanelState();
-      window.addEventListener("scroll", syncTopPanelState, { passive: true });
+      function saveUsers(users) {
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+      }
 
-      button.addEventListener("click", function () {
-        var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-        localStorage.setItem(storageKey, nextTheme);
-        applyTheme(nextTheme);
+      function getSession() {
+        return safeParse(localStorage.getItem(SESSION_KEY), null);
+      }
+
+      function setSession(session) {
+        localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      }
+
+      function clearSession() {
+        localStorage.removeItem(SESSION_KEY);
+      }
+
+      function setFormMessage(el, text, isError) {
+        if (!el) return;
+        el.textContent = text || "";
+        el.className = "form-message" + (text ? (isError ? " is-error" : " is-ok") : "");
+      }
+
+      function setTab(mode) {
+        var loginActive = mode !== "register";
+        tabLogin.setAttribute("aria-selected", String(loginActive));
+        tabRegister.setAttribute("aria-selected", String(!loginActive));
+        panelLogin.classList.toggle("auth-hidden", !loginActive);
+        panelRegister.classList.toggle("auth-hidden", loginActive);
+      }
+
+      function formatDate(iso) {
+        if (!iso) return "";
+        var d = new Date(iso);
+        if (String(d) === "Invalid Date") return "";
+        return "Sesja od: " + d.toLocaleString("pl-PL");
+      }
+
+      function renderAuth() {
+        var session = getSession();
+        var loggedIn = !!(session && session.email);
+        authBox.classList.toggle("auth-hidden", loggedIn);
+        sessionBox.classList.toggle("auth-hidden", !loggedIn);
+
+        if (loggedIn) {
+          sessionName.textContent = session.name ? "Zalogowano: " + session.name : "Zalogowano";
+          sessionEmail.textContent = session.email;
+          sessionTime.textContent = formatDate(session.loggedInAt);
+          setFormMessage(loginMessage, "", false);
+          setFormMessage(registerMessage, "", false);
+        }
+      }
+
+      tabLogin.addEventListener("click", function () { setTab("login"); });
+      tabRegister.addEventListener("click", function () { setTab("register"); });
+
+      loginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        setFormMessage(loginMessage, "", false);
+
+        var form = new FormData(loginForm);
+        var email = String(form.get("email") || "").trim().toLowerCase();
+        var password = String(form.get("password") || "");
+
+        if (!email || !password) {
+          setFormMessage(loginMessage, "Uzupełnij e-mail i hasło.", true);
+          return;
+        }
+
+        var users = loadUsers();
+        var user = users.find(function (u) { return u.email === email; });
+
+        if (!user || user.password !== password) {
+          setFormMessage(loginMessage, "Nieprawidłowy e-mail lub hasło.", true);
+          return;
+        }
+
+        setSession({
+          name: user.name || "Użytkownik",
+          email: user.email,
+          loggedInAt: new Date().toISOString()
+        });
+        setFormMessage(loginMessage, "Zalogowano. Możesz wejść do Studio.", false);
+        renderAuth();
       });
+
+      registerForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        setFormMessage(registerMessage, "", false);
+
+        var form = new FormData(registerForm);
+        var name = String(form.get("name") || "").trim();
+        var email = String(form.get("email") || "").trim().toLowerCase();
+        var password = String(form.get("password") || "");
+
+        if (!name || !email || !password) {
+          setFormMessage(registerMessage, "Wypełnij wszystkie pola.", true);
+          return;
+        }
+        if (password.length < 6) {
+          setFormMessage(registerMessage, "Hasło musi mieć co najmniej 6 znaków.", true);
+          return;
+        }
+
+        var users = loadUsers();
+        if (users.some(function (u) { return u.email === email; })) {
+          setFormMessage(registerMessage, "Konto z tym e-mailem już istnieje.", true);
+          return;
+        }
+
+        var newUser = {
+          name: name,
+          email: email,
+          password: password,
+          createdAt: new Date().toISOString()
+        };
+
+        users.unshift(newUser);
+        saveUsers(users);
+        setSession({
+          name: newUser.name,
+          email: newUser.email,
+          loggedInAt: new Date().toISOString()
+        });
+
+        registerForm.reset();
+        setFormMessage(registerMessage, "Konto utworzone i zalogowano.", false);
+        renderAuth();
+      });
+
+      logoutBtn.addEventListener("click", function () {
+        clearSession();
+        renderAuth();
+      });
+
+      setTab("login");
+      renderAuth();
     })();
   </script>
 </body>

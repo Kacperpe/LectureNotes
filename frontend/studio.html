@@ -268,6 +268,37 @@
 
   <script type="text/babel">
     const API_BASE = window.API_BASE || "http://localhost:8000";
+    const AUTH_USERS_KEY = "lnai-users-v1";
+    const AUTH_SESSION_KEY = "lnai-session-v1";
+
+    function authSafeParse(raw, fallback) {
+      try {
+        const parsed = JSON.parse(raw);
+        return parsed == null ? fallback : parsed;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function authLoadUsers() {
+      return authSafeParse(localStorage.getItem(AUTH_USERS_KEY), []);
+    }
+
+    function authSaveUsers(users) {
+      localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users));
+    }
+
+    function authGetSession() {
+      return authSafeParse(localStorage.getItem(AUTH_SESSION_KEY), null);
+    }
+
+    function authSetSession(session) {
+      localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+    }
+
+    function authClearSession() {
+      localStorage.removeItem(AUTH_SESSION_KEY);
+    }
 
     function niceDate() {
       const d = new Date();
@@ -300,7 +331,233 @@
       ].join("\n");
     }
 
+    function AuthGate({ onAuthSuccess }) {
+      const [mode, setMode] = React.useState("login");
+      const [loginEmail, setLoginEmail] = React.useState("");
+      const [loginPassword, setLoginPassword] = React.useState("");
+      const [registerName, setRegisterName] = React.useState("");
+      const [registerEmail, setRegisterEmail] = React.useState("");
+      const [registerPassword, setRegisterPassword] = React.useState("");
+      const [message, setMessage] = React.useState("");
+      const [isError, setIsError] = React.useState(false);
+
+      function showMessage(text, error) {
+        setMessage(text);
+        setIsError(!!error);
+      }
+
+      function finishLogin(user) {
+        const session = {
+          name: user.name || "Użytkownik",
+          email: user.email,
+          loggedInAt: new Date().toISOString(),
+        };
+        authSetSession(session);
+        onAuthSuccess(session);
+      }
+
+      function handleLoginSubmit(event) {
+        event.preventDefault();
+        const email = loginEmail.trim().toLowerCase();
+        const password = loginPassword;
+
+        if (!email || !password) {
+          showMessage("Wpisz e-mail i hasło.", true);
+          return;
+        }
+
+        const users = authLoadUsers();
+        const user = users.find((item) => item.email === email);
+        if (!user || user.password !== password) {
+          showMessage("Nieprawidłowy e-mail lub hasło.", true);
+          return;
+        }
+
+        showMessage("Zalogowano. Otwieram studio...", false);
+        finishLogin(user);
+      }
+
+      function handleRegisterSubmit(event) {
+        event.preventDefault();
+        const name = registerName.trim();
+        const email = registerEmail.trim().toLowerCase();
+        const password = registerPassword;
+
+        if (!name || !email || !password) {
+          showMessage("Uzupełnij wszystkie pola.", true);
+          return;
+        }
+        if (password.length < 6) {
+          showMessage("Hasło musi mieć co najmniej 6 znaków.", true);
+          return;
+        }
+
+        const users = authLoadUsers();
+        if (users.some((item) => item.email === email)) {
+          showMessage("Konto z tym e-mailem już istnieje.", true);
+          return;
+        }
+
+        const user = {
+          name,
+          email,
+          password,
+          createdAt: new Date().toISOString(),
+        };
+
+        authSaveUsers([user, ...users]);
+        showMessage("Konto utworzone. Logowanie zakończone sukcesem.", false);
+        finishLogin(user);
+      }
+
+      return (
+        <div className="startup-grid min-h-screen text-brand-ink relative">
+          <div className="ambient">
+            <div className="orb a"></div>
+            <div className="orb b"></div>
+          </div>
+
+          <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 relative z-10">
+            <section className="grid lg:grid-cols-[1.08fr,0.92fr] gap-6 items-start">
+              <div className="glass-strong rounded-3xl p-6 sm:p-8">
+                <p className="brand-pill">Studio wymaga logowania</p>
+                <h1 className="mt-4 font-display text-3xl sm:text-5xl font-bold leading-tight">
+                  Najpierw zaloguj się lub utwórz konto.
+                </h1>
+                <p className="mt-4 text-slate-700 leading-7">
+                  Dodałem prostą autoryzację demo działającą lokalnie w przeglądarce. Po zalogowaniu wejdziesz do
+                  Studio i będziesz mógł testować pełny przepływ importu nagrania, podsumowania oraz eksportu.
+                </p>
+                <div className="mt-5 space-y-2 text-sm text-slate-700">
+                  <p><strong>1.</strong> Załóż konto testowe (rejestracja).</p>
+                  <p><strong>2.</strong> Sesja zapisze się lokalnie w tej przeglądarce.</p>
+                  <p><strong>3.</strong> Studio odblokuje się automatycznie po zalogowaniu.</p>
+                </div>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a href="./index.html" className="btn-secondary">Wróć do landingu</a>
+                  <button
+                    onClick={() => {
+                      setMode("register");
+                      showMessage("", false);
+                    }}
+                    className="btn-primary"
+                    type="button"
+                  >
+                    Załóż konto
+                  </button>
+                </div>
+                <p className="mt-4 text-xs text-slate-500">
+                  Wersja demo: dane są w <code>localStorage</code>, bez backendu i bez szyfrowania haseł.
+                </p>
+              </div>
+
+              <aside className="glass rounded-3xl p-5 sm:p-6">
+                <div className="inline-flex rounded-xl border border-slate-200 bg-white/80 p-1 text-sm font-semibold w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("login");
+                      showMessage("", false);
+                    }}
+                    className={`px-4 py-2 rounded-lg transition ${mode === "login" ? "bg-white text-brand-ink shadow" : "text-slate-600"}`}
+                    aria-pressed={mode === "login"}
+                  >
+                    Logowanie
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("register");
+                      showMessage("", false);
+                    }}
+                    className={`px-4 py-2 rounded-lg transition ${mode === "register" ? "bg-white text-brand-ink shadow" : "text-slate-600"}`}
+                    aria-pressed={mode === "register"}
+                  >
+                    Rejestracja
+                  </button>
+                </div>
+
+                {mode === "login" ? (
+                  <form onSubmit={handleLoginSubmit} className="mt-4 space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">E-mail</label>
+                      <input
+                        type="email"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        placeholder="student@example.com"
+                        className="input-modern"
+                        autoComplete="email"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Hasło</label>
+                      <input
+                        type="password"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        placeholder="Twoje hasło"
+                        className="input-modern"
+                        autoComplete="current-password"
+                      />
+                    </div>
+                    <button type="submit" className="w-full btn-primary">
+                      Zaloguj się
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleRegisterSubmit} className="mt-4 space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Imię / nazwa</label>
+                      <input
+                        type="text"
+                        value={registerName}
+                        onChange={(e) => setRegisterName(e.target.value)}
+                        placeholder="Kacper"
+                        className="input-modern"
+                        autoComplete="name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">E-mail</label>
+                      <input
+                        type="email"
+                        value={registerEmail}
+                        onChange={(e) => setRegisterEmail(e.target.value)}
+                        placeholder="student@example.com"
+                        className="input-modern"
+                        autoComplete="email"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Hasło</label>
+                      <input
+                        type="password"
+                        value={registerPassword}
+                        onChange={(e) => setRegisterPassword(e.target.value)}
+                        placeholder="Minimum 6 znaków"
+                        className="input-modern"
+                        autoComplete="new-password"
+                      />
+                    </div>
+                    <button type="submit" className="w-full btn-primary">
+                      Utwórz konto
+                    </button>
+                  </form>
+                )}
+
+                <div className={`mt-4 rounded-xl px-4 py-3 text-sm border ${isError ? "border-red-200 bg-red-50 text-red-700" : "border-slate-200 bg-white/70 text-slate-700"}`}>
+                  {message || "Po zalogowaniu Studio odblokuje się automatycznie."}
+                </div>
+              </aside>
+            </section>
+          </main>
+        </div>
+      );
+    }
+
     function App() {
+      const [session, setSession] = React.useState(() => authGetSession());
       const [health, setHealth] = React.useState({ status: "unknown", notion: false });
       const [prompts, setPrompts] = React.useState([]);
       const [selectedPrompt, setSelectedPrompt] = React.useState("");
@@ -347,8 +604,17 @@
       }
 
       React.useEffect(() => {
+        if (!session) return;
         checkHealth();
         loadPrompts();
+      }, [session]);
+
+      React.useEffect(() => {
+        function handleStorageSync() {
+          setSession(authGetSession());
+        }
+        window.addEventListener("storage", handleStorageSync);
+        return () => window.removeEventListener("storage", handleStorageSync);
       }, []);
 
       async function callApi(path, payload) {
@@ -476,6 +742,15 @@
         setMessage("Pobrano plik Markdown.");
       }
 
+      function handleLogout() {
+        authClearSession();
+        setSession(null);
+      }
+
+      if (!session) {
+        return <AuthGate onAuthSuccess={setSession} />;
+      }
+
       return (
         <div className="startup-grid min-h-screen text-brand-ink relative">
           <div className="ambient">
@@ -499,6 +774,10 @@
                 >
                   Powrót do landing
                 </a>
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white/90 px-3 py-1 border border-slate-200 max-w-full">
+                  <span className="status-dot" style={{ background: "#0f766e" }}></span>
+                  <span className="truncate">Konto: {session.name || session.email}</span>
+                </span>
                 <span className="inline-flex items-center justify-center gap-2 rounded-full bg-white/90 px-3 py-1 border border-slate-200">
                   <span
                     className="status-dot"
@@ -512,6 +791,9 @@
                 </span>
                 <button onClick={checkHealth} className="w-full sm:w-auto btn-secondary text-sm">
                   Odśwież status
+                </button>
+                <button onClick={handleLogout} className="w-full sm:w-auto btn-secondary text-sm">
+                  Wyloguj
                 </button>
               </div>
             </div>
